@@ -1,0 +1,135 @@
+The given code will run into an infinite loop if the 'x' value is less than the middle value of the array. This is because if 'x' is less than or equal to the mid value, 'hi' is set to 'mid' and the 'lo' value does not change, causing the loop to run indefinitely. 
+
+Corrected Code:
+
+```python
+
+def find_first_in_sorted(arr, x):
+    lo = 0
+    hi = len(arr) - 1   # Adjust 'hi' to index last element, not out of range
+
+    while lo <= hi:
+        mid = lo + (hi - lo) // 2  # Prevents possible integer overflow
+
+        if x == arr[mid] and (mid == 0 or x != arr[mid - 1]):
+            return mid
+
+        elif x <= arr[mid]: 
+            hi = mid - 1  # Set 'hi' to 'mid - 1' to avoid the infinte loop
+
+        else:
+            lo = mid + 1
+
+    return -1
+```
+
+This corrected code maintains the same logic but avoids the infinite loop issue by adjusting 'hi' to 'mid - 1' when 'x' is less than or equal to 'arr[mid]'. Also, 'hi' is corrected to index the last element, not one out of range. Further, the calculation of mid is adjusted to prevent possible integer overflow in some languages.
+----- another analysis -----
+The error in the code is that it can get stuck in an infinite loop when "x <= arr[mid]". In this case, the high index "hi" is set to "mid", but "mid" isn't decremented in this block, so on subsequent iterations, "mid" remains the same, causing an infinite loop.
+
+Here is the corrected version of the code:
+
+```python
+def find_first_in_sorted(arr, x):
+    lo = 0
+    hi = len(arr) - 1
+
+    while lo <= hi:
+        mid = (lo + hi) // 2
+
+        if x == arr[mid] and (mid == 0 or x != arr[mid - 1]):
+            return mid
+
+        elif x <= arr[mid]:
+            hi = mid - 1
+
+        else:
+            lo = mid + 1
+
+    return -1
+```
+
+The line 'hi = len(arr)' is now 'hi = len(arr) - 1' to stay within the array index bounds. In the 'elif' block, 'hi = mid' is replaced with 'hi = mid - 1' to ensure progress in each iteration.
+
+----- another analysis -----
+The error in the code is an infinite loop due to the assigned high value never becoming less than the low value in the while loop condition. This is because "hi = mid" could create a situation where hi and lo never change, causing an infinite loop.
+
+Here is the corrected code:
+
+```python
+def find_first_in_sorted(arr, x):
+    lo = 0
+    hi = len(arr) - 1
+
+    while lo < hi:
+        mid = lo + (hi - lo) // 2
+
+        if x > arr[mid]:
+            lo = mid + 1
+        else:
+            hi = mid
+
+    if arr[lo] == x:
+        return lo
+
+    return -1
+```
+
+In this corrected version, the function now correctly uses Binary Search to identify the first appearance of x in the sorted list. If x does not appear in the list, it returns -1. 
+
+The mid value is calculated using the formula "lo + (hi - lo) // 2" to avoid integer overflow. If x is greater than the mid value, the lo is updated to mid + 1. Otherwise, the hi is updated to mid. If x is found in the array, the index is returned. If x is not found, the function returns -1.
+----- another analysis -----
+Errors, 
+
+1. Infinite loop when x <= arr[mid] is true (hi = mid).
+   Explanation: If x <= arr[mid] is true in the operation, hi = mid, may lead to an infinite loop. Because if mid = lo which is often the case when there are two elements left in the search space, setting hi = mid will cause the loop to not shrink.
+
+Corrected version of the code:
+
+```python
+def find_first_in_sorted(arr, x):
+    lo = 0
+    hi = len(arr) - 1
+
+    while lo <= hi:
+        mid = lo + (hi - lo) // 2
+
+        if x == arr[mid] and (mid == 0 or x != arr[mid - 1]):
+            return mid
+
+        elif x <= arr[mid]:
+            hi = mid - 1
+
+        else:
+            lo = mid + 1
+
+    return -1
+```
+Explanation: By setting hi = mid - 1 we make sure the interval shrinks in size at each step. Also, initialize hi as len(arr) - 1 because array indexing is zero-based in Python. We calculate temporary mid using lo + (hi - lo) // 2 instead of (lo + hi) // 2 to prevent overflow if lo + hi is greater than the maximum integer.
+----- another analysis -----
+The error is present in the while loop condition and the assignment of "hi = mid". This will result in an infinite loop if "x" is not found. In Python, you need to subtract 1 from "hi" and add 1 to "lo" in the binary search to gradually reduce the search area.
+
+Here is the corrected code:
+
+```python
+def find_first_in_sorted(arr, x):
+    lo = 0
+    hi = len(arr) - 1  # to address the array elements correctly
+
+    while lo <= hi:
+        mid = (lo + hi) // 2
+
+        if x == arr[mid] and (mid == 0 or x != arr[mid - 1]):
+            return mid
+
+        elif x <= arr[mid]:
+            hi = mid - 1  # decrement value to avoid infinite loop
+
+        else:
+            lo = mid + 1
+
+    return -1
+```
+
+This code does a binary search to find the first occurrence of "x" in the sorted array, returning its index. If "x" is not found in the array, it returns -1.
+----- another analysis -----

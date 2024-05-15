@@ -1,0 +1,245 @@
+There is a logical error in the logic of shortest_path_length function. It wrongly calculates the distance of the new node. 
+
+Corrected version of the code:
+
+```python
+from heapq import *
+
+def shortest_path_length(length_by_edge, startnode, goalnode):
+    unvisited_nodes = [] # FibHeap containing (node, distance) pairs
+    heappush(unvisited_nodes, (0, startnode))
+    visited_nodes = set()
+
+    while len(unvisited_nodes) > 0:
+        distance, node = heappop(unvisited_nodes)
+        if node is goalnode:
+            return distance
+
+        visited_nodes.add(node)
+
+        for nextnode in node.successors:
+            if nextnode in visited_nodes:
+                continue
+
+            new_distance = distance + length_by_edge.get((node, nextnode), float('inf'))
+
+            old_distance = get(unvisited_nodes, nextnode)
+            if old_distance is None or new_distance < old_distance:
+                insert_or_update(unvisited_nodes, (new_distance, nextnode))
+
+    return float('inf')
+
+
+def get(node_heap, wanted_node):
+    for dist, node in node_heap:
+        if node == wanted_node:
+            return dist
+    return None
+
+
+def insert_or_update(node_heap, dist_node):
+    dist, node = dist_node
+    for i, tpl in enumerate(node_heap):
+        a, b = tpl
+        if b == node:
+            node_heap[i] = dist_node # heapq retains sorted property
+            return None
+
+    heappush(node_heap, dist_node)
+    return None
+```
+This corrected code updates the logic how the new_node's distance is calculated. It should be sum of current distance and length to the new node from current node, not the minimum.
+----- another analysis -----
+The code tries to implement the Dijkstra's algorithm using a priority queue to get the shortest path length between a startnode and goalnode using the provided length_by_edge. 
+
+There are no compile-time errors in the code. However, there are a few logical bugs.
+
+1. In the shortest_path_length() function, there is no check to make sure that a node's successors are accessible from the length_by_edge dictionary. It will cause a KeyError.
+
+2. In the same function, the code tries to update or insert distance and node in unvisited_nodes. But it calculates the distance with an incorrect formula where it adds lengths of edges twice for the same nextnode.
+
+3. The get function returns 0 if it doesn't find the wanted_node in the node_heap. But depending on the algorithm logic, it should probably return None or float('infinity') instead of 0.
+
+4. The insert_or_update function directly updates the node_heap without maintaining heap property which may affect the result.
+
+Here's the corrected version of the code:
+
+```python
+from heapq import *
+
+def shortest_path_length(length_by_edge, startnode, goalnode):
+    unvisited_nodes = [] # Heap containing (node, distance) pairs
+    heappush(unvisited_nodes, (0, startnode))
+    visited_nodes = set()
+    dists = {startnode: 0}
+
+    while len(unvisited_nodes) > 0:
+        distance, node = heappop(unvisited_nodes)
+        if node is goalnode:
+            return distance
+
+        if node in visited_nodes:
+            continue
+
+        visited_nodes.add(node)
+
+        for nextnode in node.successors:
+            if nextnode not in length_by_edge[node]:
+                continue
+
+            if nextnode not in dists or dists[nextnode] > dists[node] + length_by_edge[node][nextnode]:
+                dists[nextnode] = dists[node] + length_by_edge[node][nextnode]
+                heappush(unvisited_nodes, (dists[nextnode], nextnode))
+
+    return float('inf')
+```
+
+This corrected code checks if successors are reachable, checks if node is already visited before visit, and keeps track of minimum distance for each node instead of trying to update heap. It will now function as a proper implementation of Dijkstra's algorithm.
+
+The corrected code doesn't need the get and insert_or_update functions, so they are removed.
+----- another analysis -----
+There is one logical error in the code, specifically in the calculation of the new distance value inside the "shortest_path_length" function. When updating the value of nextnode, the current distance of the node being processed should be added to the length of the edge from the current node to nextnode, rather than fetching it twice from unvisited_nodes. It gives us the total distance travelled to get to nextnode via the current node.
+
+Here is the corrected version of the code:
+
+```Python
+from heapq import *
+
+def shortest_path_length(length_by_edge, startnode, goalnode):
+    unvisited_nodes = [] # FibHeap containing (node, distance) pairs
+    heappush(unvisited_nodes, (0, startnode))
+    visited_nodes = set()
+
+    while len(unvisited_nodes) > 0:
+        distance, node = heappop(unvisited_nodes)
+        if node is goalnode:
+            return distance
+
+        visited_nodes.add(node)
+
+        for nextnode in node.successors:
+            if nextnode in visited_nodes:
+                continue
+
+            insert_or_update(unvisited_nodes,
+                (min(
+                    get(unvisited_nodes, nextnode) or float('inf'),
+                    distance + length_by_edge[node, nextnode]
+                ),
+                nextnode)
+            )
+
+    return float('inf')
+
+
+def get(node_heap, wanted_node):
+    for dist, node in node_heap:
+        if node == wanted_node:
+            return dist
+    return 0
+
+def insert_or_update(node_heap, dist_node):
+    dist, node = dist_node
+    for i, tpl in enumerate(node_heap):
+        a, b = tpl
+        if b == node:
+            node_heap[i] = dist_node #heapq retains sorted property
+            return None
+
+    heappush(node_heap, dist_node)
+    return None
+```
+
+In this version, the calculation of the minimum distance in the "shortest_path_length" function has been fixed to correctly update the distance of a node in the unvisited_nodes heap.
+----- another analysis -----
+There are several issues with the original code:
+1. The "get" function returns 0 when the "wanted_node" is not found in "node_heap", which is incorrect because 0 represents the shortest possible path. In such case, it should return "inf"(infinite) which signifies no path found.
+2. In the "shortest_path_length" function, under the for loop for "nextnode in node.successors", distance for "nextnode" from "unvisited_nodes" is being calculated wrongly.
+
+Corrected code:
+
+```python
+from heapq import *
+
+def shortest_path_length(length_by_edge, startnode, goalnode):
+    unvisited_nodes = []  # FibHeap containing (node, distance) pairs
+    heappush(unvisited_nodes, (0, startnode))
+    visited_nodes = set()
+    
+    while len(unvisited_nodes) > 0:
+        distance, node = heappop(unvisited_nodes)
+        
+        if node == goalnode:
+            return distance
+        
+        visited_nodes.add(node)
+
+        for nextnode in node.successors:
+            if nextnode in visited_nodes:
+                continue
+            
+            updated_dist = distance + length_by_edge[node, nextnode]
+            old_dist = get(unvisited_nodes, nextnode)
+
+            if old_dist is None or updated_dist < old_dist:
+                insert_or_update(unvisited_nodes, (updated_dist, nextnode))
+
+    return float('inf')
+
+def get(node_heap, wanted_node):
+    for dist, node in node_heap:
+        if node == wanted_node:
+            return dist
+    return None
+
+def insert_or_update(node_heap, dist_node):
+    dist, node = dist_node
+    for i, tpl in enumerate(node_heap):
+        a, b = tpl
+        if b == node:
+            node_heap[i] = dist_node  # heapq retains sorted property
+            return None
+
+    heappush(node_heap, dist_node)
+    return None
+```
+Short explanations:
+1. The "get" function returns None when the "wanted_node" is not found in "node_heap", thus the shortest path becomes non-zero.
+2. We separately calculated "updated_dist" to represent the potential new shortest path to "nextnode". If this path is shorter than any known path (or if we didn't have a known path), we update "unvisited_nodes".
+3. Control flow is fixed by shifting the check for "nextnode in visited_nodes" before its distance calculation, to avoid unnecessary efforts.
+----- another analysis -----
+There are several errors in this code:
+
+1. The `heappush()` method maintains the heap property, but changing an element with a new value does not. Python's heapq does not have a method to update a heap with new key value unless we pop all elements until we find the one which needs to be updated. Then we push this updated element and remaining elements back to the heap.
+
+2. Second problem is the way "length_by_edge[node, nextnode]" is defined. A dictionary cannot be accessed with multiple keys like this.
+
+3. Under the 'shortest_path_length' function, there's a call to 'node.successors' which is not defined anywhere in the entire code, causing an error.
+
+Below is an error corrected version of your code:
+
+```python
+from heapq import heappop, heappush
+
+def shortest_path_length(length_by_edge, startnode, goalnode):
+    unvisited_nodes = [] 
+    heappush(unvisited_nodes, (0, startnode))
+    visited_nodes = set()
+    distances = {startnode: 0}
+    
+    while unvisited_nodes:
+        distance, node = heappop(unvisited_nodes)
+        if node == goalnode:
+            return distance
+        if node not in visited_nodes:
+            visited_nodes.add(node)
+            for nextnode in length_by_edge[node]:
+                new_distance = distance + length_by_edge[node][nextnode]
+                if new_distance < distances.get(nextnode, float('inf')):
+                    distances[nextnode] = new_distance
+                    heappush(unvisited_nodes, (new_distance, nextnode))
+    return distances
+```
+
+Here, the function shortest_path_length takes a dictionary length_by_edge where edge pairs are keys and their lengths are values. It calculates the shortest path length from startnode to goalnode using the approach of Dijkstra's algorithm. It returns the shortest distance between start node and end node. Also, an updated method to manage 'unvisited_nodes' has been used here. The {'key':'value'} pair corresponds to  {'node':'distance'}.
+----- another analysis -----

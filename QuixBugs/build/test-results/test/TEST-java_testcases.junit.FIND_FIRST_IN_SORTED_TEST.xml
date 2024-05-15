@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="java_testcases.junit.FIND_FIRST_IN_SORTED_TEST" tests="7" skipped="0" failures="3" errors="0" timestamp="2024-04-03T09:44:50" hostname="LAPTOP-NVVL9JFQ" time="6.927">
+  <properties/>
+  <testcase name="test_0" classname="java_testcases.junit.FIND_FIRST_IN_SORTED_TEST" time="0.123"/>
+  <testcase name="test_1" classname="java_testcases.junit.FIND_FIRST_IN_SORTED_TEST" time="0.204">
+    <failure message="java.lang.ArrayIndexOutOfBoundsException: Index 7 out of bounds for length 7" type="java.lang.ArrayIndexOutOfBoundsException">java.lang.ArrayIndexOutOfBoundsException: Index 7 out of bounds for length 7
+	at java_programs.FIND_FIRST_IN_SORTED.find_first_in_sorted(FIND_FIRST_IN_SORTED.java:22)
+	at java_testcases.junit.FIND_FIRST_IN_SORTED_TEST.test_1(FIND_FIRST_IN_SORTED_TEST.java:13)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:298)
+	at org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:292)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+</failure>
+  </testcase>
+  <testcase name="test_2" classname="java_testcases.junit.FIND_FIRST_IN_SORTED_TEST" time="3.147">
+    <failure message="org.junit.runners.model.TestTimedOutException: test timed out after 3000 milliseconds" type="org.junit.runners.model.TestTimedOutException">org.junit.runners.model.TestTimedOutException: test timed out after 3000 milliseconds
+	at app//java_programs.FIND_FIRST_IN_SORTED.find_first_in_sorted(FIND_FIRST_IN_SORTED.java:29)
+	at app//java_testcases.junit.FIND_FIRST_IN_SORTED_TEST.test_2(FIND_FIRST_IN_SORTED_TEST.java:19)
+	at java.base@17.0.1/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base@17.0.1/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base@17.0.1/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base@17.0.1/java.lang.reflect.Method.invoke(Method.java:568)
+	at app//org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at app//org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at app//org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at app//org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at app//org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:298)
+	at app//org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:292)
+	at java.base@17.0.1/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base@17.0.1/java.lang.Thread.run(Thread.java:833)
+</failure>
+  </testcase>
+  <testcase name="test_3" classname="java_testcases.junit.FIND_FIRST_IN_SORTED_TEST" time="0.118"/>
+  <testcase name="test_4" classname="java_testcases.junit.FIND_FIRST_IN_SORTED_TEST" time="3.214">
+    <failure message="org.junit.runners.model.TestTimedOutException: test timed out after 3000 milliseconds" type="org.junit.runners.model.TestTimedOutException">org.junit.runners.model.TestTimedOutException: test timed out after 3000 milliseconds
+	at app//java_programs.FIND_FIRST_IN_SORTED.find_first_in_sorted(FIND_FIRST_IN_SORTED.java:29)
+	at app//java_testcases.junit.FIND_FIRST_IN_SORTED_TEST.test_4(FIND_FIRST_IN_SORTED_TEST.java:31)
+	at java.base@17.0.1/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base@17.0.1/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base@17.0.1/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base@17.0.1/java.lang.reflect.Method.invoke(Method.java:568)
+	at app//org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at app//org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at app//org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at app//org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at app//org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:298)
+	at app//org.junit.internal.runners.statements.FailOnTimeout$CallableStatement.call(FailOnTimeout.java:292)
+	at java.base@17.0.1/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base@17.0.1/java.lang.Thread.run(Thread.java:833)
+</failure>
+  </testcase>
+  <testcase name="test_5" classname="java_testcases.junit.FIND_FIRST_IN_SORTED_TEST" time="0.054"/>
+  <testcase name="test_6" classname="java_testcases.junit.FIND_FIRST_IN_SORTED_TEST" time="0.066"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

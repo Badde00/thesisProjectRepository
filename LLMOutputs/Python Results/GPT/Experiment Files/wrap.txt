@@ -1,0 +1,110 @@
+There are two functional issues in the code:
+
+1. The remaining string after the loop is not being added to lines. 
+2. We are not stripping leading spaces from the "text" variable, which could lead to lines starting with unnecessary spaces. 
+
+Corrected code:
+
+```python
+def wrap(text, cols):
+    lines = []
+    while len(text) > cols:
+        end = text.rfind(' ', 0, cols + 1)
+        if end == -1:
+            end = cols
+        line, text = text[:end], text[end:].lstrip()
+        lines.append(line)
+
+    if text:
+        lines.append(text)
+
+    return lines
+```
+In the corrected code, after the string slicing we are using the `lstrip()` function to remove leading white spaces from the "text" variable, and after the while loop, we are adding any remaining text to "lines".
+----- another analysis -----
+1. Error: The last string in text that can be of length <= cols is not added into the 'lines' list. This string is usually present if the length of the whole 'text' is not a multiple of 'cols'. 
+
+Correction: Append last set of characters after while loop, and remember to remove leading and trailing whitespaces if necessary.
+
+Here is the corrected code:
+
+```python
+def wrap(text, cols):
+    lines = []
+    while len(text) > cols:
+        end = text.rfind(' ', 0, cols + 1)
+        if end == -1:
+            end = cols
+        line, text = text[:end], text[end:].lstrip()
+        lines.append(line)
+    if text:
+        lines.append(text)
+    return lines
+```
+
+This function will now correctly split the input 'text' into lines of maximum 'cols' length, breaking at spaces when possible.
+----- another analysis -----
+The code has a minor error. It will work fine for strings longer than the 'cols' argument but it will not include the last section of the 'text' if it is shorter than 'cols'. This happens because once the string becomes shorter than 'cols', the condition in the while loop ('while len(text) > cols') will not hold and the loop will stop executing, thus the remaining text will not be appended to the 'lines' list.
+
+Here's the corrected code:
+
+```python
+def wrap(text, cols):
+    lines = []
+    while text:
+        if len(text) > cols:
+            end = text.rfind(' ', 0, cols + 1)
+            if end == -1:
+                end = cols
+            line, text = text[:end], text[end:].lstrip()
+        else:
+            line, text = text, ""
+        lines.append(line)
+    return lines
+```
+Here, the 'while' loop will keep executing until 'text' is an empty string and if 'text' is shorter than 'cols' it will be appended to 'lines'. We also use lstrip() method to remove leading whitespaces when slicing text.
+----- another analysis -----
+The code has a logical error. With the detection of the word-end boundary, it can potentially create infinite loops when a word is longer than the specified 'cols'. Also with the current slicing scheme, the space at the end of each chunk is eaten up by the slice, so the following words will be concatenated to the last word of a previous line in the returned list.
+
+Corrected Version:
+```python
+def wrap(text, cols):
+    lines = []
+    while len(text) > cols:
+        end = text.rfind(' ', 0, cols + 1)
+        if end == -1:
+            if ' ' in text:
+                end = text.index(' ')
+            else:
+                end = len(text)
+        line, text = text[:end], text[end+1:]
+        lines.append(line)
+    if text:
+        lines.append(text)
+    return lines
+```
+In the corrected version, when a word is longer than 'cols', it splits at the first occurrence of a space in the remaining text. If there is no space (it's a single extremely long word), it takes the whole text. It also adds the remainder of the 'text' as a new line to 'lines' if there is any, after the while loop. Also, the space is correctly handled in the slicing, hence avoiding concatenation of words on two separate lines.
+----- another analysis -----
+The existing code has two main errors:
+
+1. The new `text` in the line `line, text = text[:end], text[end:]` includes the white space in the beginning which while displaying, will start from a new line with a leading space.
+
+2. It does not handle the case where final part of the 'text' that is shorter than 'cols'. The code will not add this final part to the list 'lines', and it will be lost.
+
+Therefore, the corrected code would be:
+
+```
+def wrap(text, cols):
+    lines = []
+    while len(text) > cols:
+        end = text.rfind(' ', 0, cols + 1)
+        if end == -1:
+            end = cols
+        line, text = text[:end], text[end:].lstrip()
+        lines.append(line)
+    if text:  
+        lines.append(text)
+    return lines
+```
+Here, `.lstrip()` is added to remove leading spaces from the 'text', and an `if` statement is added to include remaining 'text' into 'lines'.
+----- another analysis -----

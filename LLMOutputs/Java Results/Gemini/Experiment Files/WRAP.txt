@@ -1,0 +1,236 @@
+## Code Review
+
+The provided code appears to be written in Java and contains two main parts:
+
+- **A `main` function:** This function takes no arguments and calls the `wrap` function with the string "abc" and a column width of 30. It then prints the result to the console.
+- **A `wrap` function:** This function takes a string and a column width as arguments and returns a list of strings. The function iterates over the input string, splitting it into lines of at most the specified width. If a word is longer than the remaining column width, it is broken onto the next line. 
+
+## Errors
+
+There are no apparent errors in the provided code. 
+
+## Corrected Code
+
+Since there are no errors, the provided code remains unchanged. 
+
+## Additional Notes
+
+- The `wrap` function currently only handles spaces as word separators. If the input string contains other word separators like hyphens or punctuation marks, the code may need to be modified to handle those as well. 
+- The `wrap` function assumes that the input string is not empty. If the input string is empty, the function will return an empty list. You may want to consider adding checks to handle this case. 
+
+## Conclusion
+
+The provided code appears to be correct and functional. However, depending on the specific requirements and desired behavior, some minor adjustments could be made to enhance its functionality.
+----- another analysis -----
+## Code Review: 
+
+Here's an analysis of the provided code:
+
+**Errors:**
+
+1. **`lastIndexOf` Out of Bounds:** In the `main` function, `lastIndexOf("c", 30)` is called on the string "abc". However, the index 30 is beyond the string's length (which is 3). This will result in an `IndexOutOfBoundsException`.
+
+**Corrected Code:**
+
+```java
+import java.util.*;
+
+public class WRAP {
+    public static void main(String[] args) {
+        System.out.println("abc".lastIndexOf("c", 2)); // Corrected index
+    }
+
+    public static ArrayList<String> wrap(String text, int cols) {
+        ArrayList<String> lines = new ArrayList<String>();
+
+        String line;
+        while (text.length() > cols) {
+            int end = text.lastIndexOf(" ", cols);
+            if (end == -1) {
+                end = cols;
+            }
+            line = text.substring(0,end);
+            text = text.substring(end);
+            lines.add(line);
+        }
+
+        // Add the remaining text as the last line
+        if (text.length() > 0) {
+            lines.add(text);
+        }
+
+        return lines;
+    }
+}
+```
+
+**Explanation of Corrections:**
+
+- In the `main` function, we changed the index in `lastIndexOf` to 2, which is within the string's bounds.
+- In the `wrap` function, we added a check to include the remaining text after the loop if its length is greater than 0. This ensures all text is included in the wrapped lines. 
+ 
+## Additional Notes:
+
+- The code currently only handles wrapping at spaces. If you need to wrap at other characters or handle edge cases like words longer than the column width, further modifications would be necessary. 
+
+----- another analysis -----
+## Errors in the code
+
+There are two errors in the code:
+
+1. **IndexOutOfBoundsException in `lastIndexOf`:** The `lastIndexOf` method in line 6 throws an `IndexOutOfBoundsException` if the substring "c" is not found within the specified range. This can happen if the provided index `30` is greater than the actual index of "c" in the string "abc".
+2. **Off-by-one error in substring:** The `substring` method in line 12 should include the end index to capture the full word. Currently, it stops one character before the specified end index due to the way substring works.
+
+## Corrected Code
+
+Here is the corrected version of the code:
+
+```java
+public class WRAP {
+    public static void main(String[] args) {
+        System.out.println("abc".lastIndexOf("c", 2)); // Corrected index
+    }
+
+    public static ArrayList<String> wrap(String text, int cols) {
+        ArrayList<String> lines = new ArrayList<String>();
+
+        String line;
+        while (text.length() > cols) {
+            int end = text.lastIndexOf(" ", cols);
+            if (end == -1) {
+                end = cols;
+            }
+            line = text.substring(0, end + 1); // Include end index
+            text = text.substring(end + 1);      // Update starting index
+            lines.add(line);
+        }
+
+        return lines;
+    }
+}
+```
+
+Changes made:
+
+* In the `main` method, the index in `lastIndexOf` is corrected to 2, which is the index of "c" in "abc".
+* In the `wrap` method, the substring call now includes the end index (+1) to capture the entire word at the end of the line.
+* Additionally, the starting index for the next substring is updated to `end + 1` to avoid missing characters.
+
+With these corrections, the code should function properly and avoid potential errors. 
+
+----- another analysis -----
+## Errors and Corrections:
+
+The provided code contains no errors. However, there are some potential areas for improvement:
+
+1. **Indentation:** The `if` statement inside the `wrap` method is not indented correctly. The proper indentation would be:
+
+```java
+if (end == -1) {
+    end = cols;
+}
+```
+
+2. **Empty Line:** Adding an empty line between the class declaration and the `main` method might improve readability:
+
+```java
+public class WRAP {
+
+    public static void main(String[] args) {
+        // ...
+    }
+
+    // ...
+}
+```
+
+3. **Variable Naming:** In the `wrap` method, `cols` might be more descriptive as `columnWidth` or `maxLineLength`, making the code easier to understand.
+
+
+
+## Corrected Code:
+
+```java
+import java.util.*;
+
+public class WRAP {
+
+    public static void main(String[] args) {
+        System.out.println("abc".lastIndexOf("c", 30));  // Output: -1
+    }
+
+    public static ArrayList<String> wrap(String text, int columnWidth) {
+        ArrayList<String> lines = new ArrayList<>();
+
+        String line;
+        while (text.length() > columnWidth) {
+            int end = text.lastIndexOf(" ", columnWidth);
+            if (end == -1) {
+                end = columnWidth;
+            }
+            line = text.substring(0, end);
+            text = text.substring(end);
+            lines.add(line);
+        }
+
+        // Add the remaining text as the last line 
+        if (text.length() > 0) {
+            lines.add(text);
+        }
+
+        return lines;
+    }
+}
+```
+
+----- another analysis -----
+## Errors and Corrections:
+
+There are no errors in the provided code. However, I can offer some suggestions for improvement:
+
+1. **Javadoc:** Consider adding Javadoc comments to clarify the purpose and usage of the `wrap` method. This will improve the code's readability and maintainability.
+2. **Indentation:** In the `lastIndexOf` section, the indentation is inconsistent. Make sure to maintain consistent indentation throughout the code for better readability.
+3. **Variable Naming:** The `end` variable could be renamed to be more descriptive, such as `lastSpaceIndex`. This improves code clarity.
+
+Here's the corrected code with the suggested improvements:
+
+```java
+import java.util.*;
+
+public class WRAP {
+
+    public static void main(String[] args) {
+        System.out.println("abc".lastIndexOf("c", 30));
+    }
+
+   /**
+    * Wraps the given text into lines of the specified column width.
+    *
+    * @param text The text to be wrapped.
+    * @param cols The desired column width.
+    * @return A list of strings, where each string represents a wrapped line.
+    */
+    public static ArrayList<String> wrap(String text, int cols) {
+        ArrayList<String> lines = new ArrayList<>();
+
+        String line;
+        while (text.length() > cols) {
+            int lastSpaceIndex = text.lastIndexOf(" ", cols);
+            if (lastSpaceIndex == -1) {
+                lastSpaceIndex = cols;
+            }
+            line = text.substring(0, lastSpaceIndex);
+            text = text.substring(lastSpaceIndex);
+            lines.add(line);
+        }
+
+        lines.add(text); // Add the remaining text as the last line
+
+        return lines;
+    }
+}
+```
+
+This version includes Javadoc comments, consistent indentation, and a more descriptive variable name, making the code more readable and easier to understand.
+
+----- another analysis -----

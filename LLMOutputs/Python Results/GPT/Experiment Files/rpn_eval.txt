@@ -1,0 +1,195 @@
+Errors:
+1. When popping numbers off the stack for binary operations, 'b' should be popped off the stack first, then 'a' -- you want 'b a -' to correspond to 'b - a', not 'a - b'.
+2. Operations like '/' will fail when b is zero. So, a check is needed before division operation.
+3. The code only checks for float. It should work with integers as well.
+
+Corrected code:
+
+```python
+def rpn_eval(tokens):
+    def op(symbol, a, b):
+        if(symbol == '/'):
+            if(b == 0): 
+                raise ValueError("Error: Division by zero")
+            return a / b
+        else:
+            return {
+                '+': a + b,
+                '-': a - b,
+                '*': a * b
+            }[symbol]
+
+    stack = []
+    for token in tokens:
+        if isinstance(token, float) or isinstance(token, int):
+            stack.append(token)
+        else:
+            b = stack.pop()
+            a = stack.pop()
+            stack.append(op(token, a, b))
+    return stack.pop()
+```
+Please note that this code still assumes valid RPN input where operators always have two valid preceding numbers. For more robust error checking, you would want to ensure that the operators popping 'a' and 'b' from the stack is safe. This could involve checking if the stack has enough numbers before popping, and throwing an exception or error message if not. For example, an input '2 +' would cause an error.
+----- another analysis -----
+The above code has several problems:
+
+1. It assumes to act on floating point numbers, but it doesn't specify any handling for integer values. So if integer values were passed, they would not be processed due to the isinstance(token, float).
+
+2. In the operation function, number b is popped before number a. This will cause wrong calculations, because the last added number should be the first to be popped in a stack machine context.
+
+3. The code has no error handling for wrong or harmful inputs (e.g., division by zero or passing non-numeric or non-operator values).
+
+Here's the corrected version of above code:
+
+```python
+def rpn_eval(tokens):
+    def op(symbol, a, b):
+        return {
+            '+': lambda a, b: a + b,
+            '-': lambda a, b: a - b,
+            '*': lambda a, b: a * b,
+            '/': lambda a, b: a / b if b != 0 else 'Error: Division by zero'
+        }.get(symbol, lambda a, b: 'Error: Invalid operator')(a, b)
+
+    stack = []
+
+    for token in tokens:
+        if isinstance(token, (int, float)):
+            stack.append(token)
+        elif isinstance(token, str):
+            b = stack.pop()
+            a = stack.pop()
+            result = op(token, a, b)
+            if 'Error' in str(result):
+                return result
+            stack.append(result)
+        else:
+            return 'Error: Invalid token type'
+
+    return stack.pop() if stack else 'Error: Empty stack'
+```
+This version handles both float and int, ensures correct order of operation, and deals with a number of error scenarios.
+----- another analysis -----
+The code is designed as a Reverse Polish Notation (RPN) evaluator. It doesn't have any syntax errors or exceptions. However, it does contain logical errors:
+
+1. Arguments order: When '+' or '*' is used, the order doesn't matter; but for '-' and '/', the order matters. In your code, you're popping 'a' and then 'b'. So, when you do 'b-a' or 'b/a', you're processing them in reverse. 
+
+2. Checking for float only: The code assumes that numerical values are floating-point. Integer values won't be pushed to the stack. 
+
+Here's the corrected version:
+
+```python
+def rpn_eval(tokens):
+    def op(symbol, a, b):
+        return {
+            '+': lambda a, b: a + b,
+            '-': lambda a, b: a - b,
+            '*': lambda a, b: a * b,
+            '/': lambda a, b: a / b
+        }[symbol](a, b)
+
+    stack = []
+
+    for token in tokens:
+        if isinstance(token, (int, float)):  # Allow both integer and float
+            stack.append(token)
+        else:
+            b = stack.pop()  # Swap 'a' and 'b'
+            a = stack.pop()  # Swap 'a' and 'b'
+            stack.append(
+                op(token, a, b)
+            )
+
+    return stack.pop()
+```
+
+Note: This code assumes that 'tokens' contains valid RPN expressions, otherwise it may throw exceptions.
+----- another analysis -----
+The code provided doesn't have any syntax errors and can be successfully run. However, potential logical and runtime errors exist. 
+
+1. In Reverse Polish Notation (RPN), operands are pushed onto the stack. When an operator comes up in the traversal, the operator is applied to the two most recent operands, and the result is pushed onto the stack. Hence, operand 'b' should be removed from the stack before operand 'a'.
+2. The operations are assuming that the stack will always contain at least 2 elements when an operator is encountered. If there's only one element in stack, it will throw IndexError.
+3. Division operation is expecting integer division results, but in case of floating point numbers, it can result in float which is not handled here.
+4. Also there's no handling of potential ZeroDivisionError in division operation.
+5. No handling or checking if the token is actually one of the expected operators.
+6. There's no handling for if the final stack ends up with more than one element.
+7. It doesn't check if inputs are valid i.e., check if tokens are actually float or operators. 
+
+Here's a version of the code with above mentioned potential errors handled:
+
+```python
+def rpn_eval(tokens):
+    def op(symbol, a, b):
+        if symbol == '/': 
+            if b == 0:
+                raise ZeroDivisionError("division by zero")
+        return {
+            '+': lambda a, b: a + b,
+            '-': lambda a, b: a - b,
+            '*': lambda a, b: a * b,
+            '/': lambda a, b: a / b if b != 0 else 0,     #additional zero division check handled
+        }.get(symbol, None)
+    
+    stack = []
+
+    for token in tokens:
+        if isinstance(token, (int, float)):
+            stack.append(token)
+        elif token in ['+', '-', '*', '/']:     #additional token type check
+            if len(stack) < 2:                  #additional check for len of stack
+                raise ValueError('Insufficient operands.')
+            a = stack.pop()
+            b = stack.pop()
+            result = op(token, b, a)
+            if result is not None:
+                stack.append(result)
+            else:
+                raise ValueError('Invalid operator: {}'.format(token))
+        else:
+            raise ValueError('Invalid token: {}'.format(token))
+            
+    if len(stack) != 1:              #additional final check for stack length
+        raise ValueError('Too many operands.')
+        
+    return stack.pop()
+```
+
+Hope this helps! Please let me know if you have any other questions.
+----- another analysis -----
+The provided code does not contain any syntax errors. However, there are problems with the logic of the code that may lead to runtime errors.
+
+1. When the `op()` function is called, it pops two values from the stack without checking whether there are enough values in the stack. If there aren't two items in the stack to remove, Python raises an `IndexError` exception.
+
+2. Reverse Polish notation (RPN) computation usually accepts strings to identify operations, but the code checks if the token is a `float` which might not always be the case. Numbers could also be integers.
+
+3. Given it is RPN, `a` should be the second operand and `b` should be the first operand for the operation. But the code is popping out in the incorrect order as it makes `b` the second operand and `a` the first operand.
+
+Here is a corrected version of the code:
+
+```python
+def rpn_eval(tokens):
+    def op(symbol, a, b):
+        return {
+            '+': lambda a, b: a + b,
+            '-': lambda a, b: a - b,
+            '*': lambda a, b: a * b,
+            '/': lambda a, b: a / b
+        }[symbol](a, b)
+
+    stack = []
+
+    for token in tokens:
+        if str(token).replace('.','',1).isdigit() or str(token).lstrip('-').replace('.','',1).isdigit():
+            stack.append(float(token))
+        else:
+            if len(stack) < 2:
+                raise ValueError('Insufficient operands for the operation')
+
+            b = stack.pop()
+            a = stack.pop()
+            stack.append(op(token, a, b))
+
+    return stack.pop()
+```
+The check `str(token).replace('.','',1).isdigit() or str(token).lstrip('-').replace('.','',1).isdigit()` ensures that the token is a number. It takes care of integer and float values, both positive and negative. It converts the number string to float before appending to the stack. The order of popping the operands from the stack is also corrected by exchanging the positions of `a` and `b`. Also an error check has been added to handle the situation where there are not enough operands for the operation in the stack.
+----- another analysis -----

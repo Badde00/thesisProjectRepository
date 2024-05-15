@@ -1,0 +1,161 @@
+The code has logical error which leads to infinite loop. In the binary search algorithm, if we find that x <= arr[mid], we should set hi = mid - 1, not hi = mid. Similarly, in the else loop, we should set lo = mid + 1. 
+
+Corrected code:
+
+```java
+import java.util.*;
+
+public class FIND_FIRST_IN_SORTED {
+
+    public static int find_first_in_sorted(int[] arr, int x) {
+        int lo = 0;
+        int hi = arr.length - 1;
+
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+            
+            if(x > arr[mid]){
+                lo = mid + 1;
+            }else if(x < arr[mid] || (mid > 0 && arr[mid-1] == x)){
+                hi = mid - 1;
+            }else{
+                return mid;
+            }
+        }
+        return -1;
+    }
+
+}
+```
+Explanations:
+This Java code runs a binary search in a given sorted list (arr). It checks for the existence of the integer (x) in the list and
+returns the index of the first occurrence of 'x' when it is found. If 'x' isn't found in the list, the function returns -1.
+
+The adjustments made fixed the issue where the algorithm would potentially enter an infinite loop because the high range (hi) was set to arr.length and not arr.length - 1. Additionally, conditions were adjusted so the high and low range would properly close in on the integer being sought.
+----- another analysis -----
+The original code has an infinite loop because in the condition `if (x <= arr[mid])`, it is assigning `hi` to `mid` which may not change `mid` on the next iteration if `x` is still less than or equal to `arr[mid]`. Same problem appears on assigning `hi = mid`. 
+
+This can be fixed by assigning `hi = mid - 1` when `x <= arr[mid]` and `lo = mid + 1` respectively to ensure that the range `[lo, hi]` being considered always shrinks and avoids the infinite loop situation. Additionally, `hi = arr.length;` should be changed to `hi = arr.length - 1;` to avoid ArrayIndexOutOfBoundsException.
+
+Correct code:
+
+```java
+import java.util.*;
+
+public class FIND_FIRST_IN_SORTED {
+    
+    public static int find_first_in_sorted(int[] arr, int x) {
+        int lo = 0;
+        int hi = arr.length - 1;
+    
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (x == arr[mid] && (mid == 0 || x != arr[mid-1])) {
+                return mid;
+            } else if (x <= arr[mid]) {
+                hi = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+
+        return -1;
+    }
+}
+```
+----- another analysis -----
+The given code contains an error which might lead to an infinite loop. When the 'x' value is less than or equal to 'arr[mid]', the 'hi = mid;' code will not change the 'mid' value if 'hi - lo = 1'. This will result in a repeated mid value in the next iteration of the 'while' loop leading to an infinite loop.
+
+The corrected code is as below:
+
+```java
+import java.util.*;
+
+public class FIND_FIRST_IN_SORTED {
+
+    public static int find_first_in_sorted(int[] arr, int x) {
+        int lo = 0;
+        int hi = arr.length - 1;
+
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (x == arr[mid] && (mid == 0 || x != arr[mid-1])) {
+                return mid;
+            } else if (x <= arr[mid]) {
+                hi = mid - 1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+
+        return -1;
+    }
+
+}
+```
+In this corrected code, I changed the 'hi' initialization to 'arr.length - 1' since array indices start at 0. For calculating 'mid', instead of directly averaging 'lo' and 'hi', I applied the formula 'lo + (hi-lo)/2' to avoid overflow errors. When 'x <= arr[mid]', 'hi' is set to 'mid - 1', not 'mid'.
+----- another analysis -----
+The code has only one minor error which can lead to an infinite loop. The reason behind this is that the value of `hi` should be decreased by 1 when updating, otherwise the while loop will not exit as expected when `lo` equals `hi`.
+
+Here is the corrected code:
+
+```java
+import java.util.*;
+
+public class FIND_FIRST_IN_SORTED {
+
+    public static int find_first_in_sorted(int[] arr, int x) {
+        int lo = 0;
+        int hi = arr.length - 1;
+
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+            if (x == arr[mid] && (mid == 0 || x != arr[mid-1])) {
+               return mid;
+            } else if (x <= arr[mid]) {
+               hi = mid - 1;   // decrement hi 
+            } else {
+               lo = mid + 1;
+            }
+        }
+
+        return -1;
+    }
+
+}
+```
+When the new high part (`hi`) is set to the middle element in binary sort, it should be set as `mid - 1` instead of `mid`, to avoid the possibility of an infinite loop. In addition, it's better to set `hi = arr.length - 1` instead of `hi = arr.length`, as it avoids the potential IndexOutOfBoundsException.
+----- another analysis -----
+There is one logical error in the code causing an infinite loop. It happens when the `x` value is less than or equal to `arr[mid]`. In that case, `hi` should be set to `mid - 1` instead of `mid` to avoid an infinite loop.
+
+Below is the corrected code.
+
+```java
+import java.util.*;
+
+public class FIND_FIRST_IN_SORTED {
+
+    public static int find_first_in_sorted(int[] arr, int x) {
+        int lo = 0;
+        int hi = arr.length - 1;  // here
+
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+
+            if (x == arr[mid] && (mid == 0 || x != arr[mid-1])) {
+                return mid;
+            } else if (x <= arr[mid]) {
+                hi = mid - 1;  // and here
+            } else {
+                lo = mid + 1;
+            }
+        }
+
+        return -1;
+    }
+
+}
+```
+----- another analysis -----

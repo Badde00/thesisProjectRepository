@@ -1,0 +1,191 @@
+There are no syntactical errors in the code, it should work perfectly fine. However, there is a logic error that's present. After splitting the text at the last whitespace before "cols" characters, you need to skip that whitespace in the next line. Currently, the next line always starts with a space which is not desired. This is typically the outcome of using `text.substring(end);`. 
+
+After identifying this issue in the original code, the corrected code should look like this:
+
+```java
+import java.util.*;
+
+public class WRAP {
+    public static void main(String[] args) {
+        System.out.println("abc".lastIndexOf("c",30));
+    }
+
+    public static ArrayList<String> wrap(String text, int cols) {
+        ArrayList<String> lines = new ArrayList<String>();
+
+        while (text.length() > cols) {
+            int end = text.lastIndexOf(" ", cols);
+            if (end == -1) {
+                end = cols;
+            }
+            String line = text.substring(0, end).trim();
+            text = text.substring(end).trim();
+            lines.add(line);
+        }
+
+        if (text.length() > 0) {
+            lines.add(text);
+        }
+
+        return lines;
+    }
+}
+```
+
+In the corrected version of the code, we also added a condition `if (text.length() > 0) lines.add(text);` to ensure that the last part of the text (which may be fewer than `cols` characters long) is also added to `lines`.
+
+Moreover, the replacement of `text = text.substring(end);` with `text = text.substring(end).trim();` is made. This line of code removes the leading space from the remaining text.
+----- another analysis -----
+The code doesn't have any syntax errors, however, there is a potential logical flaw:
+
+In the 'wrap' method, when the 'text' length is less than or equal to 'cols', the remaining 'text' won't be added to the 'lines' array list as there is no handling for this case, which may result in data loss.
+
+Here is the corrected code:
+
+```java
+import java.util.*;
+
+public class WRAP {
+    public static void main(String[] args) {
+        System.out.println("abc".lastIndexOf("c",30));
+    }
+
+    public static ArrayList<String> wrap(String text, int cols) {
+        ArrayList<String> lines = new ArrayList<String>();
+
+        String line;
+        while (text.length() > cols) {
+            int end = text.lastIndexOf(" ", cols);
+            if (end == -1) {
+                end = cols;
+            }
+            line = text.substring(0,end);
+            text = text.substring(end).trim();
+            lines.add(line);
+        }
+
+        if (!text.isEmpty()) {
+	    lines.add(text);
+        }
+
+        return lines;
+    }
+}
+```
+
+In this corrected code, we added a if condition to handle the remaining 'text' if its length is less than or equal to 'cols'. We also added the 'trim()' method to remove leading and trailing spaces when we update 'text', this will prevent empty strings from getting added to the list in the next loop iteration.
+----- another analysis -----
+The code is correct, there's no syntactical error in the given code. But there's a logical error which may cause unexpected result when the 'text' length is less than or equal to 'cols' after the while loop. Because the remaining text will not be added in the 'lines' array list, this part will be ignored. 
+
+So here is an updated version:
+
+import java.util.*;
+
+public class WRAP {
+    public static void main(String[] args) {
+        System.out.println("abc".lastIndexOf("c",30));
+    }
+
+    public static ArrayList<String> wrap(String text, int cols) {
+        ArrayList<String> lines = new ArrayList<String>();
+
+        while (text.length() > cols) {
+            int end = text.lastIndexOf(" ", cols);
+            if (end == -1) {
+                end = cols;
+            }
+
+            lines.add(text.substring(0,end));
+
+            text = text.substring(end).trim();
+        }
+
+        if (!text.isEmpty()) {
+            lines.add(text);
+        }
+
+        return lines;
+    }
+}
+
+In the updated version, after the while loop, the remaining part of the text, if it's not empty, is added into the 'lines' list. Also, inaccuracies can come up because of leading spaces, so added a trim() function while updating the 'text' string.
+----- another analysis -----
+There were no syntax errors in the code, it will compile and run. However, there's a logical problem with the wrap() method: it does not handle the case when remaining length of the string is less than 'cols'. Also, if the line is broken by a space, the new line will start with this space. 
+
+Here's the corrected version of the code:
+
+import java.util.*;
+
+public class WRAP {
+    public static void main(String[] args) {
+        System.out.println("abc".lastIndexOf("c",30));
+    }
+
+    public static ArrayList<String> wrap(String text, int cols) {
+        ArrayList<String> lines = new ArrayList<String>();
+
+        while (text.length() > 0) {
+            if (text.length() <= cols) {
+                lines.add(text);
+                break;
+            } 
+            int end = text.lastIndexOf(" ", cols);
+            if (end == -1) {
+                end = cols;
+            } else {
+                end++;
+            }
+            String line = text.substring(0,end);
+            text = text.substring(end);
+            lines.add(line);
+        }
+
+        return lines;
+    }
+}
+----- another analysis -----
+Here is a list of issues present in the code:
+
+1. The main method only prints out an irrelevant lastIndexOf function call, and it doesn't call the defined wrap function.
+
+2. In the wrap function, there's a possibility of an infinite loop. If a space is not found in `text.lastIndexOf(" ", cols);` within the given columns, and text length is more than cols, it will result in an infinite loop.
+
+3. The text is not trimmed when it's being removed from the original text. Due to this, space could be the first character of new text, and if the character at 'cols' index is also a space, it will not be found, causing an infinite loop again.
+
+Corrected version:
+
+```java
+import java.util.*;
+
+public class WRAP {
+    public static void main(String[] args) {
+        // Call wrap function
+        ArrayList<String> wrappedText = wrap("This is a sample text to check the wrap function working.", 15);
+        for(String str : wrappedText) {
+            System.out.println(str);
+        }
+    }
+
+    public static ArrayList<String> wrap(String text, int cols) {
+        ArrayList<String> lines = new ArrayList<>();
+
+        String line;
+        while (text.length() > cols) {
+            int end = text.lastIndexOf(" ", cols);
+            if (end == -1)
+                end = cols;
+            
+            line = text.substring(0,end);
+            lines.add(line);
+
+            text = text.substring(end).trim(); // trim to remove leading spaces
+        }
+        if (text.length() > 0) {
+            lines.add(text); // add the remaining text
+        }
+        
+        return lines;
+    }
+}
+```
+----- another analysis -----

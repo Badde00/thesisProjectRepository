@@ -1,0 +1,432 @@
+## Code review and error identification: 
+
+Here's a breakdown of the errors in the provided code and suggestions for correction:
+
+**Errors:**
+
+1. **`Math.min` Argument Type Mismatch:** In both versions of the `shortest_paths` function, the `Math.min` function is used to compare and update the weights. However, the argument types provided to `Math.min` are incompatible. In both cases, one argument is an `Integer` (weight from the map) and the other is an `int` (result of an addition operation). This mismatch will result in a compilation error.
+
+2. **Modifying Input Data Structure:** In the first version of the `shortest_paths` function, the `weight_by_edge` map is directly modified within the loop that iterates through its keyset. This can lead to unexpected behavior and is generally considered bad practice.
+
+3. **Incorrect Weight Update Calculation:** In the second version of the `shortest_paths` function, the weight update calculation is incorrect. The new weight should be the minimum of the existing weight of the destination node and the sum of the source node's weight and the edge weight. The current implementation updates the edge weight instead of the destination node weight.
+
+
+**Corrected Code:**
+
+Here are the corrected versions of the two functions:
+
+```java
+// Version 1
+public static Map<String, Integer> shortest_paths(String source, Map<List<String>, Integer> weight_by_edge) {
+    Map<String, Integer> weight_by_node = new HashMap<>();
+    for (List<String> edge : weight_by_edge.keySet()) {
+        weight_by_node.put(edge.get(1), INF);
+        weight_by_node.put(edge.get(0), INF);
+    }
+
+    weight_by_node.put(source, 0);
+    for (int i = 0; i < weight_by_node.size(); i++) {
+        for (List<String> edge : weight_by_edge.keySet()) {
+            int update_weight = Math.min(
+                    weight_by_node.get(edge.get(0)) + weight_by_edge.get(edge), // Corrected argument types 
+                    weight_by_node.get(edge.get(1))); 
+            weight_by_node.put(edge.get(1), update_weight); // Update destination node weight
+        }
+    }
+    return weight_by_node;
+}
+
+// Version 2 
+public static Map<String, Integer> shortest_paths(Node source, List<WeightedEdge> weight_by_edge) {
+    Map<String, Integer> weight_by_node = new HashMap<>();
+    for (WeightedEdge edge : weight_by_edge) {
+        weight_by_node.put(edge.node1.toString(), INF);
+        weight_by_node.put(edge.node2.toString(), INF);
+    }
+
+    weight_by_node.put(source.getValue(), 0);
+    for (int i = 0; i < weight_by_node.size(); i++) {
+        for (WeightedEdge edge : weight_by_edge) {
+            int update_weight = Math.min(
+                    weight_by_node.get(edge.node1.toString()) + edge.weight,  // Corrected argument types
+                    weight_by_node.get(edge.node2.toString()));
+            weight_by_node.put(edge.node2.toString(), update_weight); // Update destination node weight
+        }
+    }
+    return weight_by_node;
+}
+```
+
+
+These corrections address the identified errors and provide a more accurate and robust implementation of the shortest path algorithm. 
+
+----- another analysis -----
+## Errors in the code:
+
+1. **Incorrect import:** `import java.lang.Math;` should be simply `import java.lang.Math;`. The `.` after `Math` is incorrect syntax.
+2. **Incorrect data structure for weights:** `weight_by_edge` should be a `Map<String, Integer>` instead of `Map<List<String>, Integer>`. It maps a single string (the edge) to its weight, not a list of strings.
+3. **Missing logic for handling edges with the same source and destination:** The code should update the weight of an edge only if the new weight is smaller than the existing weight. Currently, it always updates regardless of the existing weight.
+4. **Redundant calculations:** The inner loop iterates over all edges in `weight_by_edge` for each element in `weight_by_node`. This is unnecessarily computationally expensive. It would be more efficient to iterate over only the edges that are connected to the current node.
+
+
+
+## Corrected code:
+
+```java
+import java.util.*;
+
+public class SHORTEST_PATHS {
+
+    final static int INF = 99999;
+
+    public static Map<String, Integer> shortest_paths(String source, Map<String, Integer> weight_by_edge) {
+        Map<String, Integer> weight_by_node = new HashMap<>();
+        for (String edge : weight_by_edge.keySet()) {
+            weight_by_node.put(edge, INF);
+        }
+
+        weight_by_node.put(source, 0);
+
+        for (int i = 0; i < weight_by_node.size(); i++) {
+            for (String edge : weight_by_node.keySet()) {
+                String[] nodes = edge.split("-");
+                if (nodes[0].equals(source)) {
+                    int update_weight = Math.min(
+                            weight_by_node.get(edge),
+                            weight_by_edge.get(edge) + weight_by_node.get(nodes[1]));
+                    if (update_weight < weight_by_node.get(edge)) {
+                        weight_by_node.put(edge, update_weight);
+                    }
+                }
+            }
+        }
+
+        return weight_by_node;
+    }
+
+    public static Map<String, Integer> shortest_paths(Node source, List<WeightedEdge> weight_by_edge) {
+        Map<String, Integer> weight_by_node = new HashMap<>();
+        for (WeightedEdge edge : weight_by_edge) {
+            weight_by_node.put(edge.node1.getValue(), INF);
+            weight_by_node.put(edge.node2.getValue(), INF);
+        }
+
+        weight_by_node.put(source.getValue(), 0);
+
+        for (int i = 0; i < weight_by_node.size(); i++) {
+            for (WeightedEdge edge : weight_by_edge) {
+                int update_weight = Math.min(
+                        weight_by_node.get(edge.node1.getValue()) + edge.weight,
+                        weight_by_node.get(edge.node2.getValue()));
+                if (update_weight < weight_by_node.get(edge.node1.getValue())) {
+                    weight_by_node.put(edge.node1.getValue(), update_weight);
+                }
+                if (update_weight < weight_by_node.get(edge.node2.getValue())) {
+                    weight_by_node.put(edge.node2.getValue(), update_weight);
+                }
+            }
+        }
+
+        return weight_by_node;
+    }
+}
+```
+----- another analysis -----
+## Code Review and Corrections:
+
+The provided code `SHORTEST_PATHS` has two functions: `shortest_paths(String source, Map<List<String>, Integer> weight_by_edge)` and `shortest_paths(Node source, List<WeightedEdge> weight_by_edge)`. Both functions calculate shortest paths from a given source to all other nodes in a graph.
+
+## Errors:
+
+1. **Incorrect edge weight update:** In both functions, the calculation of the updated weight is incorrect. It uses `edge.get(1)` and `get(edge.get(1))` which refers to a node name, but the intended value should be the weight associated with the edge. 
+
+2. **Redundant Node initialization:** In the first function, the node initialization is redundant as it iterates through all nodes in the graph and sets their weight to infinity, regardless of their initial state. 
+
+3. **Missing Node class:** The code defines a class `Node` but does not provide its implementation, which is required for the second function.
+
+## Corrected code:
+
+```java
+import java.util.*;
+
+public class SHORTEST_PATHS {
+
+    final static int INF = 99999;
+
+    static class Node {
+        String value;
+
+        public Node(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+    }
+
+    static class WeightedEdge {
+        Node node1;
+        Node node2;
+        int weight;
+
+        public WeightedEdge(Node node1, Node node2, int weight) {
+            this.node1 = node1;
+            this.node2 = node2;
+            this.weight = weight;
+        }
+    }
+
+    public static Map<String, Integer> shortest_paths(String source, Map<List<String>, Integer> weight_by_edge) {
+        Map<String, Integer> weight_by_node = new HashMap<>();
+        weight_by_edge.keySet().forEach(edge -> weight_by_node.put(edge.get(0), INF));
+        weight_by_edge.keySet().forEach(edge -> weight_by_node.put(edge.get(1), INF));
+
+        weight_by_node.put(source, 0);
+        for (int i = 0; i < weight_by_node.size(); i++) {
+            for (List<String> edge : weight_by_edge.keySet()) {
+                String node0 = edge.get(0);
+                String node1 = edge.get(1);
+                weight_by_edge.put(edge, 
+                    Math.min(
+                        weight_by_node.get(node0) + weight_by_edge.get(edge),
+                        weight_by_node.get(node1) + weight_by_edge.get(edge)
+                    )
+                );
+            }
+        }
+        return weight_by_node;
+    }
+
+    public static Map<String, Integer> shortest_paths(Node source, List<WeightedEdge> weight_by_edge) {
+        Map<String, Integer> weight_by_node = new HashMap<>();
+
+        for (WeightedEdge edge : weight_by_edge) {
+            weight_by_node.put(edge.node1.toString(), INF);
+            weight_by_node.put(edge.node2.toString(), INF);
+        }
+        weight_by_node.put(source.toString(), 0);
+
+        for (int i = 0; i < weight_by_node.size(); i++) {
+            for (WeightedEdge edge : weight_by_edge) {
+                // Update the weight of the node associated with edge.node1 or edge.node2
+                String updatingNode = weight_by_node.keySet().stream()
+                        .filter(nodeStr -> nodeStr.equals(edge.node1.toString()) || nodeStr.equals(edge.node2.toString()))
+                        .findFirst()
+                        .orElseThrow(() -> new RuntimeException("Node not found in weight_by_node"));
+
+                int update_weight = Math.min(
+                        weight_by_node.get(edge.node1.toString()) + edge.weight,
+                        weight_by_node.get(edge.node2.toString()) + edge.weight
+                );
+
+                weight_by_node.put(updatingNode, update_weight);
+            }
+        }
+        return weight_by_node;
+    }
+}
+```
+
+## Explanation of Corrections:
+
+* The incorrect edge weight access was fixed by using `edge.getValue(0)` and `edge.getValue(1)` to access node names and then retrieving the corresponding weight from the map. 
+* The redundant node initialization was replaced with iterating over the edge set and directly populating weights for nodes involved in edges. 
+* The missing `Node` class was added with a simple implementation and a `toString()` method to represent the node as its value. 
+* In the second function, a logic was added to update weights for the associated node of the edge (`edge.node1` or `edge.node2`). 
+
+
+## Additional Notes:
+
+This corrected code implements the Bellman-Ford algorithm for finding shortest paths in a weighted directed graph with potential negative edge weight. It is important to note that the algorithm takes `O(|V||E|)` time, where |V| is the number of nodes and |E| is the number of edges in the graph.
+----- another analysis -----
+## Errors and Corrections:
+
+**1. Conflicting Variable Names:**
+
+There are two variables named `weight_by_edge`:
+
+- One is a `Map<List<String>, Integer>`
+- The other is a `List<WeightedEdge>`
+
+This can cause confusion and potential errors. 
+
+**Correction:**
+
+Rename one of the variables to avoid confusion. For example, you could rename the `List<WeightedEdge>` to `weighted_edges`.
+
+**2. Incorrect Loop Condition:**
+
+In both `shortest_paths` functions, the loop iterates `weight_by_node.size()` times. However, the size of the `weight_by_node` map is constantly changing within the loop, which can lead to unexpected behavior.
+
+**Correction:**
+
+Change the loop condition to `weight_by_node.size() - 1`. This will ensure that the loop iterates the correct number of times.
+
+**3. Unnecessary Key Updates:**
+
+In both functions, the code updates the weight of existing edges within the `weight_by_edge` map. However, the shortest path algorithm only needs to update the weights of nodes, not edges.
+
+**Correction:**
+
+Remove the lines that update the weights of edges within the `weight_by_edge` map.
+
+**4. Missing Return Statement:**
+
+The second `shortest_paths` function is missing a return statement.
+
+**Correction:**
+
+Add a `return weight_by_node;` statement at the end of the function.
+
+## Corrected Code:
+
+```java
+import java.util.*;
+import java.lang.Math.*;
+
+public class SHORTEST_PATHS {
+
+    final static int INF = 99999;
+
+    public static Map<String, Integer> shortest_paths(String source, Map<List<String>, Integer> weighted_edges) {
+        Map<String, Integer> weight_by_node = new HashMap<>();
+        for (List<String> edge : weighted_edges.keySet()) {
+            weight_by_node.put(edge.get(1), INF);
+            weight_by_node.put(edge.get(0), INF);
+        }
+
+        weight_by_node.put(source, 0);
+        for (int i = 0; i < weight_by_node.size() - 1; i++) {
+            for (List<String> edge : weighted_edges.keySet()) {
+                int update_weight = Math.min(
+                        weight_by_node.get(edge.get(0))
+                                + weighted_edges.get(edge),
+                        weight_by_node.get(edge.get(1)));
+                weight_by_node.put(edge.get(1), update_weight); // Update node weight
+            }
+        }
+        return weight_by_node;
+    }
+
+    public static Map<String, Integer> shortest_paths(Node source, List<WeightedEdge> weighted_edges) {
+        Map<String, Integer> weight_by_node = new HashMap<>();
+        for (WeightedEdge edge : weighted_edges) {
+            weight_by_node.put(edge.node1.toString(), INF);
+            weight_by_node.put(edge.node2.toString(), INF);
+        }
+
+        weight_by_node.put(source.getValue(), 0);
+        for (int i = 0; i < weight_by_node.size() - 1; i++) {
+            for (WeightedEdge edge : weighted_edges) {
+                int update_weight = Math.min(
+                        weight_by_node.get(edge.node1.toString())
+                                + edge.weight,
+                        weight_by_node.get(edge.node2.toString()));
+                weight_by_node.put(edge.node2.toString(), update_weight); // Update node weight
+            }
+        }
+        return weight_by_node;
+    }
+}
+```
+----- another analysis -----
+## Errors and Corrections in the Code
+
+**1) Duplicate Keys in `weight_by_edge` Map:**
+
+In both `shortest_paths` functions, you are adding each edge twice to the `weight_by_edge` map, with swapped node order. This creates duplicate keys and potentially incorrect results. 
+
+**Corrected Code:**
+
+```java
+import java.util.*;
+import java.lang.Math.*;
+
+public class SHORTEST_PATHS {
+
+    final static int INF = 99999;
+
+
+    public static Map<String, Integer> shortest_paths(String source, Map<String,Integer> weight_by_edge) {
+        Map<String,Integer> weight_by_node = new HashMap<>();
+
+        // Add nodes and initialize weights
+        for (String node : weight_by_edge.keySet()) {
+            weight_by_node.put(node, INF);
+        }
+
+        weight_by_node.put(source, 0);
+
+        // Relax edges repeatedly
+        for (int i = 0; i < weight_by_node.size() - 1; i++) {
+            for (Map.Entry<String, Integer> entry : weight_by_edge.entrySet()) {
+                String node1 = entry.getKey().split(",")[0];
+                String node2 = entry.getKey().split(",")[1];
+                int weight = entry.getValue();
+
+                int update_weight = Math.min(
+                        weight_by_node.get(node1) + weight,
+                        weight_by_node.get(node2));
+
+                weight_by_node.put(node2, update_weight);
+            }
+        }
+
+        return weight_by_node;
+    }
+
+    public static Map<String, Integer> shortest_paths(Node source, List<WeightedEdge> weight_by_edge) {
+        Map<String,Integer> weight_by_node = new HashMap<>();
+
+        // Add nodes and initialize weights
+        for (WeightedEdge edge : weight_by_edge) {
+            weight_by_node.put(edge.node1.getValue(), INF);
+            weight_by_node.put(edge.node2.getValue(), INF);
+        }
+
+        weight_by_node.put(source.getValue(), 0);
+
+        // Relax edges repeatedly
+        for (int i = 0; i < weight_by_node.size() - 1; i++) {
+            for (WeightedEdge edge : weight_by_edge) {
+                int update_weight = Math.min(
+                        weight_by_node.get(edge.node1.getValue()) + edge.weight,
+                        weight_by_node.get(edge.node2.getValue()));
+
+                weight_by_node.put(edge.node2.getValue(), update_weight);
+            }
+        }
+
+        return weight_by_node;
+    }
+}
+```
+
+**2) `Math.min` Argument Order:**
+
+In both functions, the `Math.min` arguments are reversed. The correct order should be:
+
+```java
+Math.min(
+    weight_by_node.get(edge.node1.getValue()) + edge.weight,
+    weight_by_node.get(edge.node2.getValue())
+);
+```
+
+**3) `weight_by_edge` Update:**
+
+In the first function, you are updating the weight of edges in the `weight_by_edge` map during each iteration. This is not necessary and can lead to incorrect results. 
+
+**4) Loop Termination Condition:**
+
+In both functions, the loop iterates `weight_by_node.size()` times. However, the correct termination condition is `weight_by_node.size() - 1` to avoid unnecessary iterations. 
+
+
+## Additional Notes:
+
+* The corrected code assumes that the input edge weights are non-negative.
+* You can use a priority queue to improve the efficiency of the algorithm.
+* You can handle negative edge weights by using the Bellman-Ford algorithm.
+----- another analysis -----

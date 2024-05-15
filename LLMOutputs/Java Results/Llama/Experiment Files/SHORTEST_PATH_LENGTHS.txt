@@ -1,0 +1,483 @@
+ [ INST ] Please review the following code and identify and list any errors . If errors are present , please present a corrected version of the code as well . Keep explan ations short . 
+ 
+ 
+ import java . util .*; 
+ import java . lang . Math .*; 
+ 
+ public class SH OR TEST _ PATH _ LENGTH S { 
+    final static int IN F =  9 9 9 9 9 ; 
+    public static Map < List < Integer >, Integer > short est _ path _ length s ( int num Nodes , Map < List < Integer >, Integer > length _ by _ edge ) { 
+        Map < List < Integer >, Integer > length _ by _ path = new HashMap <>(); 
+        for ( int i =  0 ; i < num Nodes ; i ++) { 
+            for ( int j = 0 ; j < num Nodes ; j ++) { 
+                List < Integer > edge = new ArrayList < >( Array s . as List ( i , j )); 
+                if ( i == j ) { 
+                    length _ by _ path . put ( edge ,  0 ); 
+                } 
+                else if ( length _ by _ edge . contains Key ( edge ) ) { 
+                    length _ by _ path . put ( edge , length _ by _ edge . get ( edge )); 
+                } else { 
+                    length _ by _ path . put ( edge , IN F ); 
+                } 
+            } 
+        } 
+        for ( int k =  0 ; k < num Nodes ; k ++) { 
+            for ( int i =  0 ; i < num Nodes ; i ++) { 
+                for ( int j =  0 ; j < num Nodes ; j ++) { 
+                    int update _ length = Math . min ( length _ by _ path . get ( Array s . as List ( i , j )), 
+                                                 sum Length s ( length _ by _ path . get ( Array s . as List ( i , k )), 
+                                                            length _ by _ path . get ( Array s . as List ( j , k )) )); 
+                    length _ by _ path . put ( Array s . as List ( i , j ), update _ length ); 
+                } 
+            } 
+        } 
+        return length _ by _ path ; 
+    } 
+ 
+    static private int sum Length s ( int a , int b ) { 
+        if ( a == IN F || b == IN F ) { 
+            return IN F ; 
+        } 
+        return a + b ; 
+    } 
+ 
+ } [ / INST ]  There are several errors in the code : 
+ 
+ 1 . The class name ` SH OR TEST _ PATH _ LENGTH S ` should be in upper case , as per Java naming convent ions . 
+ 2 . The ` import java . lang . Math .* ` statement is not needed , as the ` Math ` class is already imported by the ` import java . util .* ` statement . 
+ 3 . The ` INF ` constant should be defined as ` Integer . MAX _ VALUE `, as ` 9 9 9 9 9 ` is not a valid value for an integer . 
+ 4 . The ` sum Length s ` method should be defined as a static method , as it does not use any instance variables . 
+ 5 . The ` length _ by _ path ` map should be initialized with the ` length _ by _ edge ` map , as the ` length _ by _ path ` map is a copy of the ` length _ by _ edge ` map with some modifications . 
+ 6 . The ` for ` loop in the ` short est _ path _ length s ` method should be replaced with a ` foreach ` loop , as it is more conc ise and easier to read . 
+ 7 . The ` length _ by _ path ` map should be returned at the end of the method , as it is the only value that is being returned . 
+ 
+ Here is the corrected code : 
+ ``` 
+ import java . util .*; 
+ 
+ public class Short est Path Length s { 
+    final static int IN F = Integer . MAX _ VALUE ; 
+ 
+    public static Map < List < Integer >, Integer > short est Path Length s ( int num Nodes , Map < List < Integer >, Integer > length By Edge ) { 
+        Map < List < Integer >, Integer > length By Path = new HashMap <>(); 
+        for ( List < Integer > edge : length By Edge . key Set ()) { 
+            length By Path . put ( edge , length By Edge . get ( edge )); 
+        } 
+        for ( int k =  0 ; k < num Nodes ; k ++) { 
+            for ( int i =  0 ; i < num Nodes ; i ++) { 
+                for ( int j =  0 ; j < num Nodes ; j ++) { 
+                    int update Length = Math . min ( length By Path . get ( Array s . as List ( i , j )), 
+                            sum Length s ( length By Path . get ( Array s . as List ( i , k )), 
+                                    length By Path . get ( Array s . as List ( j , k )) )); 
+                    length By Path . put ( Array s . as List ( i , j ), update Length ); 
+                } 
+            } 
+        } 
+        return length By Path ; 
+    } 
+ 
+    static private int sum Length s ( int a , int b ) { 
+        if ( a == IN F || b == IN F ) { 
+            return IN F ; 
+        } 
+        return a + b ; 
+    } 
+ } 
+ ```  
+----- another analysis -----
+ [ INST ] Please review the following code and identify and list any errors . If errors are present , please present a corrected version of the code as well . Keep explan ations short . 
+ 
+ 
+ import java . util .*; 
+ import java . lang . Math .*; 
+ 
+ public class SH OR TEST _ PATH _ LENGTH S { 
+    final static int IN F =  9 9 9 9 9 ; 
+    public static Map < List < Integer >, Integer > short est _ path _ length s ( int num Nodes , Map < List < Integer >, Integer > length _ by _ edge ) { 
+        Map < List < Integer >, Integer > length _ by _ path = new HashMap <>(); 
+        for ( int i =  0 ; i < num Nodes ; i ++) { 
+            for ( int j = 0 ; j < num Nodes ; j ++) { 
+                List < Integer > edge = new ArrayList < >( Array s . as List ( i , j )); 
+                if ( i == j ) { 
+                    length _ by _ path . put ( edge ,  0 ); 
+                } 
+                else if ( length _ by _ edge . contains Key ( edge ) ) { 
+                    length _ by _ path . put ( edge , length _ by _ edge . get ( edge )); 
+                } else { 
+                    length _ by _ path . put ( edge , IN F ); 
+                } 
+            } 
+        } 
+        for ( int k =  0 ; k < num Nodes ; k ++) { 
+            for ( int i =  0 ; i < num Nodes ; i ++) { 
+                for ( int j =  0 ; j < num Nodes ; j ++) { 
+                    int update _ length = Math . min ( length _ by _ path . get ( Array s . as List ( i , j )), 
+                                                 sum Length s ( length _ by _ path . get ( Array s . as List ( i , k )), 
+                                                            length _ by _ path . get ( Array s . as List ( j , k )) )); 
+                    length _ by _ path . put ( Array s . as List ( i , j ), update _ length ); 
+                } 
+            } 
+        } 
+        return length _ by _ path ; 
+    } 
+ 
+    static private int sum Length s ( int a , int b ) { 
+        if ( a == IN F || b == IN F ) { 
+            return IN F ; 
+        } 
+        return a + b ; 
+    } 
+ 
+ } [ / INST ]  There are several errors in the code : 
+ 
+ 1 . The class name is not in cam el Case format , it should be ` Short est Path Length s `. 
+ 2 . The method name is not in cam el Case format , it should be ` short est Path Length s `. 
+ 3 . The import statement for ` java . lang . Math ` is not needed , as the ` Math ` class is already imported by the ` java . util ` package . 
+ 4 . The ` INF ` constant is not defined , it should be defined as ` Integer . MAX _ VALUE `. 
+ 5 . The ` sum Length s ` method is not defined , it should be defined as : 
+ ``` 
+ static private int sum Length s ( int a , int b ) { 
+    return a + b ; 
+ } 
+ ``` 
+ 6 . The ` length _ by _ path ` map is not initialized , it should be initialized as : 
+ ``` 
+ Map < List < Integer >, Integer > length By Path = new HashMap <>(); 
+ ``` 
+ 7 . The ` length _ by _ edge ` map is not used , it should be passed as a parameter to the method . 
+ 8 . The ` for ` loop in the method is not correct , it should be : 
+ ``` 
+ for ( int i =  0 ; i < num Nodes ; i ++) { 
+    for ( int j =  0 ; j < num Nodes ; j ++) { 
+        if ( i == j ) { 
+            length By Path . put ( Array s . as List ( i , j ),  0 ); 
+        } else { 
+            int update Length = Math . min ( length By Path . get ( Array s . as List ( i , j )), 
+                                        sum Length s ( length By Path . get ( Array s . as List ( i , k )), 
+                                                   length By Path . get ( Array s . as List ( j , k )) )); 
+            length By Path . put ( Array s . as List ( i , j ), update Length ); 
+        } 
+    } 
+ } 
+ ``` 
+ 9 . The ` for ` loop in the method is not correct , it should be : 
+ ``` 
+ for ( int k =  0 ; k < num Nodes ; k ++) { 
+    for ( int i =  0 ; i < num Nodes ; i ++) { 
+        for ( int j =  0 ; j < num Nodes ; j ++) { 
+            int update Length = Math . min ( length By Path . get ( Array s . as List ( i , j )), 
+                                        sum Length s ( length By Path . get ( Array s . as List ( i , k )), 
+                                                   length By Path . get ( Array s . as List ( j , k )) )); 
+            length By Path . put ( Array s . as List ( i , j ), update Length ); 
+        } 
+    } 
+ } 
+ ``` 
+ 
+ Here is the corrected code : 
+ ``` 
+ import java . util .*; 
+ 
+ public class Short est Path Length s { 
+    final static int IN F = Integer . MAX _ VALUE ; 
+ 
+    public static Map < List < Integer >, Integer > short est Path Length s ( int num Nodes , Map < List < Integer >, Integer > length By Edge ) { 
+        Map < List < Integer >, Integer > length By Path = new HashMap <>(); 
+        for ( int i =  0 ; i < num Nodes ; i ++) { 
+            for ( int j =  0 ; j < num Nodes ; j ++) { 
+                if ( i == j ) { 
+                    length By Path . put ( Array s . as List ( i , j ),  0 ); 
+                } else { 
+                    int update Length = Math . min ( length By Path . get ( Array s . as List ( i , j )), 
+                                                sum Length s ( length By Path . get ( Array s . as List ( i , k )), 
+                                                           length By Path . get ( Array s . as List ( j , k )) )); 
+                    length By Path . put ( Array s . as List ( i , j ), update Length ); 
+                } 
+            } 
+        } 
+        return length By Path ; 
+    } 
+ 
+    static private int sum Length s ( int a , int b ) { 
+        return a + b ; 
+    } 
+ } 
+ ```  
+----- another analysis -----
+ [ INST ] Please review the following code and identify and list any errors . If errors are present , please present a corrected version of the code as well . Keep explan ations short . 
+ 
+ 
+ import java . util .*; 
+ import java . lang . Math .*; 
+ 
+ public class SH OR TEST _ PATH _ LENGTH S { 
+    final static int IN F =  9 9 9 9 9 ; 
+    public static Map < List < Integer >, Integer > short est _ path _ length s ( int num Nodes , Map < List < Integer >, Integer > length _ by _ edge ) { 
+        Map < List < Integer >, Integer > length _ by _ path = new HashMap <>(); 
+        for ( int i =  0 ; i < num Nodes ; i ++) { 
+            for ( int j = 0 ; j < num Nodes ; j ++) { 
+                List < Integer > edge = new ArrayList < >( Array s . as List ( i , j )); 
+                if ( i == j ) { 
+                    length _ by _ path . put ( edge ,  0 ); 
+                } 
+                else if ( length _ by _ edge . contains Key ( edge ) ) { 
+                    length _ by _ path . put ( edge , length _ by _ edge . get ( edge )); 
+                } else { 
+                    length _ by _ path . put ( edge , IN F ); 
+                } 
+            } 
+        } 
+        for ( int k =  0 ; k < num Nodes ; k ++) { 
+            for ( int i =  0 ; i < num Nodes ; i ++) { 
+                for ( int j =  0 ; j < num Nodes ; j ++) { 
+                    int update _ length = Math . min ( length _ by _ path . get ( Array s . as List ( i , j )), 
+                                                 sum Length s ( length _ by _ path . get ( Array s . as List ( i , k )), 
+                                                            length _ by _ path . get ( Array s . as List ( j , k )) )); 
+                    length _ by _ path . put ( Array s . as List ( i , j ), update _ length ); 
+                } 
+            } 
+        } 
+        return length _ by _ path ; 
+    } 
+ 
+    static private int sum Length s ( int a , int b ) { 
+        if ( a == IN F || b == IN F ) { 
+            return IN F ; 
+        } 
+        return a + b ; 
+    } 
+ 
+ } [ / INST ]  There are several errors in the code : 
+ 
+ 1 . The class name is not in cam el Case format , it should be ` Short est Path Length s `. 
+ 2 . The method name is not in cam el Case format , it should be ` short est Path Length s `. 
+ 3 . The ` INF ` constant is not defined , it should be defined as ` final static int IN F = Integer . MAX _ VALUE ; `. 
+ 4 . The ` sum Length s ` method is not defined , it should be defined as ` static private int sum Length s ( int a , int b ) { return a + b ; } `. 
+ 5 . The ` length _ by _ edge ` map is not used in the method , it should be passed as a parameter . 
+ 6 . The ` length _ by _ path ` map is not initialized , it should be initialized with an empty map . 
+ 7 . The ` for ` loops are not properly ind ented . 
+ 8 . The ` if ` statement in the ` for ` loop is not properly ind ented . 
+ 9 . The ` else if ` statement is not properly ind ented . 
+ 1 0 . The ` else ` statement is not properly ind ented . 
+ 
+ Here is the corrected code : 
+ ``` 
+ import java . util .*; 
+ import java . lang . Math .*; 
+ 
+ public class Short est Path Length s { 
+    final static int IN F = Integer . MAX _ VALUE ; 
+ 
+    public static Map < List < Integer >, Integer > short est Path Length s ( int num Nodes , Map < List < Integer >, Integer > length By Edge ) { 
+        Map < List < Integer >, Integer > length By Path = new HashMap <>(); 
+        for ( int i =  0 ; i < num Nodes ; i ++) { 
+            for ( int j =  0 ; j < num Nodes ; j ++) { 
+                List < Integer > edge = new ArrayList < >( Array s . as List ( i , j )); 
+                if ( i == j ) { 
+                    length By Path . put ( edge ,  0 ); 
+                } else if ( length By Edge . contains Key ( edge )) { 
+                    length By Path . put ( edge , length By Edge . get ( edge )); 
+                } else { 
+                    length By Path . put ( edge , IN F ); 
+                } 
+            } 
+        } 
+        for ( int k =  0 ; k < num Nodes ; k ++) { 
+            for ( int i =  0 ; i < num Nodes ; i ++) { 
+                for ( int j =  0 ; j < num Nodes ; j ++) { 
+                    int update Length = Math . min ( length By Path . get ( Array s . as List ( i , j )), 
+                            sum Length s ( length By Path . get ( Array s . as List ( i , k )), 
+                                    length By Path . get ( Array s . as List ( j , k )) )); 
+                    length By Path . put ( Array s . as List ( i , j ), update Length ); 
+                } 
+            } 
+        } 
+        return length By Path ; 
+    } 
+ 
+    static private int sum Length s ( int a , int b ) { 
+        return a + b ; 
+    } 
+ } 
+ ```  
+----- another analysis -----
+ [ INST ] Please review the following code and identify and list any errors . If errors are present , please present a corrected version of the code as well . Keep explan ations short . 
+ 
+ 
+ import java . util .*; 
+ import java . lang . Math .*; 
+ 
+ public class SH OR TEST _ PATH _ LENGTH S { 
+    final static int IN F =  9 9 9 9 9 ; 
+    public static Map < List < Integer >, Integer > short est _ path _ length s ( int num Nodes , Map < List < Integer >, Integer > length _ by _ edge ) { 
+        Map < List < Integer >, Integer > length _ by _ path = new HashMap <>(); 
+        for ( int i =  0 ; i < num Nodes ; i ++) { 
+            for ( int j = 0 ; j < num Nodes ; j ++) { 
+                List < Integer > edge = new ArrayList < >( Array s . as List ( i , j )); 
+                if ( i == j ) { 
+                    length _ by _ path . put ( edge ,  0 ); 
+                } 
+                else if ( length _ by _ edge . contains Key ( edge ) ) { 
+                    length _ by _ path . put ( edge , length _ by _ edge . get ( edge )); 
+                } else { 
+                    length _ by _ path . put ( edge , IN F ); 
+                } 
+            } 
+        } 
+        for ( int k =  0 ; k < num Nodes ; k ++) { 
+            for ( int i =  0 ; i < num Nodes ; i ++) { 
+                for ( int j =  0 ; j < num Nodes ; j ++) { 
+                    int update _ length = Math . min ( length _ by _ path . get ( Array s . as List ( i , j )), 
+                                                 sum Length s ( length _ by _ path . get ( Array s . as List ( i , k )), 
+                                                            length _ by _ path . get ( Array s . as List ( j , k )) )); 
+                    length _ by _ path . put ( Array s . as List ( i , j ), update _ length ); 
+                } 
+            } 
+        } 
+        return length _ by _ path ; 
+    } 
+ 
+    static private int sum Length s ( int a , int b ) { 
+        if ( a == IN F || b == IN F ) { 
+            return IN F ; 
+        } 
+        return a + b ; 
+    } 
+ 
+ } [ / INST ]  There are several errors in the code : 
+ 
+ 1 . The class name is not in cam el Case format , it should be ` Short est Path Length s `. 
+ 2 . The method name is not in cam el Case format , it should be ` short est Path Length s `. 
+ 3 . The ` INF ` constant is not defined , it should be defined as ` final static int IN F = Integer . MAX _ VALUE ; `. 
+ 4 . The ` sum Length s ` method is not defined , it should be defined as ` static private int sum Length s ( int a , int b ) { return a + b ; } `. 
+ 5 . The ` length _ by _ path ` map is not initialized , it should be initialized as ` Map < List < Integer >, Integer > length _ by _ path = new HashMap <>(); `. 
+ 6 . The ` length _ by _ edge ` map is not used , it should be passed as a parameter to the method . 
+ 7 . The ` for ` loop in the method is not correct , it should be ` for ( int i =  0 ; i < num Nodes ; i ++) { for ( int j =  0 ; j < num Nodes ; j ++) { if ( i == j ) { length _ by _ path . put ( Array s . as List ( i , j ),  0 ); } else { int update _ length = Math . min ( length _ by _ path . get ( Array s . as List ( i , j )), sum Length s ( length _ by _ path . get ( Array s . as List ( i , k )), length _ by _ path . get ( Array s . as List ( j , k )) )); length _ by _ path . put ( Array s . as List ( i , j ), update _ length ); } } } `. 
+ 
+ Here is the corrected code : 
+ ``` 
+ import java . util .*; 
+ import java . lang . Math .*; 
+ 
+ public class Short est Path Length s { 
+    final static int IN F = Integer . MAX _ VALUE ; 
+ 
+    public static Map < List < Integer >, Integer > short est Path Length s ( int num Nodes , Map < List < Integer >, Integer > length _ by _ edge ) { 
+        Map < List < Integer >, Integer > length _ by _ path = new HashMap <>(); 
+        for ( int i =  0 ; i < num Nodes ; i ++) { 
+            for ( int j =  0 ; j < num Nodes ; j ++) { 
+                List < Integer > edge = new ArrayList < >( Array s . as List ( i , j )); 
+                if ( i == j ) { 
+                    length _ by _ path . put ( edge ,  0 ); 
+                } else if ( length _ by _ edge . contains Key ( edge )) { 
+                    length _ by _ path . put ( edge , length _ by _ edge . get ( edge )); 
+                } else { 
+                    length _ by _ path . put ( edge , IN F ); 
+                } 
+            } 
+        } 
+        for ( int k =  0 ; k < num Nodes ; k ++) { 
+            for ( int i =  0 ; i < num Nodes ; i ++) { 
+                for ( int j =  0 ; j < num Nodes ; j ++) { 
+                    int update _ length = Math . min ( length _ by _ path . get ( Array s . as List ( i , j )), sum Length s ( length _ by _ path . get ( Array s . as List ( i , k )), length _ by _ path . get ( Array s . as List ( j , k )) )); 
+                    length _ by _ path . put ( Array s . as List ( i , j ), update _ length ); 
+                } 
+            } 
+        } 
+        return length _ by _ path ; 
+    } 
+ 
+    static private int sum Length s ( int a , int b ) { 
+        return a + b ; 
+    } 
+ } 
+ ```  
+----- another analysis -----
+ [ INST ] Please review the following code and identify and list any errors . If errors are present , please present a corrected version of the code as well . Keep explan ations short . 
+ 
+ 
+ import java . util .*; 
+ import java . lang . Math .*; 
+ 
+ public class SH OR TEST _ PATH _ LENGTH S { 
+    final static int IN F =  9 9 9 9 9 ; 
+    public static Map < List < Integer >, Integer > short est _ path _ length s ( int num Nodes , Map < List < Integer >, Integer > length _ by _ edge ) { 
+        Map < List < Integer >, Integer > length _ by _ path = new HashMap <>(); 
+        for ( int i =  0 ; i < num Nodes ; i ++) { 
+            for ( int j = 0 ; j < num Nodes ; j ++) { 
+                List < Integer > edge = new ArrayList < >( Array s . as List ( i , j )); 
+                if ( i == j ) { 
+                    length _ by _ path . put ( edge ,  0 ); 
+                } 
+                else if ( length _ by _ edge . contains Key ( edge ) ) { 
+                    length _ by _ path . put ( edge , length _ by _ edge . get ( edge )); 
+                } else { 
+                    length _ by _ path . put ( edge , IN F ); 
+                } 
+            } 
+        } 
+        for ( int k =  0 ; k < num Nodes ; k ++) { 
+            for ( int i =  0 ; i < num Nodes ; i ++) { 
+                for ( int j =  0 ; j < num Nodes ; j ++) { 
+                    int update _ length = Math . min ( length _ by _ path . get ( Array s . as List ( i , j )), 
+                                                 sum Length s ( length _ by _ path . get ( Array s . as List ( i , k )), 
+                                                            length _ by _ path . get ( Array s . as List ( j , k )) )); 
+                    length _ by _ path . put ( Array s . as List ( i , j ), update _ length ); 
+                } 
+            } 
+        } 
+        return length _ by _ path ; 
+    } 
+ 
+    static private int sum Length s ( int a , int b ) { 
+        if ( a == IN F || b == IN F ) { 
+            return IN F ; 
+        } 
+        return a + b ; 
+    } 
+ 
+ } [ / INST ]  There are several errors in the code : 
+ 
+ 1 . The class name ` SH OR TEST _ PATH _ LENGTH S ` should be in upper case , as per Java naming convent ions . 
+ 2 . The import statement for ` java . lang . Math ` is not necessary , as the ` Math ` class is already imported by the ` java . util ` import statement . 
+ 3 . The method ` short est _ path _ length s ` should be renamed to ` short est Path Length s ` to follow Java naming convent ions . 
+ 4 . The variable ` length _ by _ edge ` is not used in the method , and it should be removed . 
+ 5 . The variable ` INF ` is not defined , and it should be replaced with ` Integer . MAX _ VALUE `. 
+ 6 . The method ` sum Length s ` is not used , and it should be removed . 
+ 7 . The method ` short est Path Length s ` has a bug in the inner loop , where the ` length _ by _ path ` map is being updated with the wrong values . The correct update should be ` length _ by _ path . put ( Array s . as List ( i , j ), Math . min ( length _ by _ path . get ( Array s . as List ( i , k )), length _ by _ path . get ( Array s . as List ( j , k )) )); `. 
+ 
+ Here is the corrected code : 
+ ``` 
+ import java . util .*; 
+ 
+ public class Short est Path Length s { 
+    final static int IN F = Integer . MAX _ VALUE ; 
+    public static Map < List < Integer >, Integer > short est Path Length s ( int num Nodes , Map < List < Integer >, Integer > length _ by _ edge ) { 
+        Map < List < Integer >, Integer > length _ by _ path = new HashMap <>(); 
+        for ( int i =  0 ; i < num Nodes ; i ++) { 
+            for ( int j = 0 ; j < num Nodes ; j ++) { 
+                List < Integer > edge = new ArrayList < >( Array s . as List ( i , j )); 
+                if ( i == j ) { 
+                    length _ by _ path . put ( edge ,  0 ); 
+                } 
+                else if ( length _ by _ edge . contains Key ( edge ) ) { 
+                    length _ by _ path . put ( edge , length _ by _ edge . get ( edge )); 
+                } else { 
+                    length _ by _ path . put ( edge , IN F ); 
+                } 
+            } 
+        } 
+        for ( int k =  0 ; k < num Nodes ; k ++) { 
+            for ( int i =  0 ; i < num Nodes ; i ++) { 
+                for ( int j =  0 ; j < num Nodes ; j ++) { 
+                    int update _ length = Math . min ( length _ by _ path . get ( Array s . as List ( i , j )), 
+                                                 length _ by _ path . get ( Array s . as List ( i , k )) + length _ by _ path . get ( Array s . as List ( j , k ))); 
+                    length _ by _ path . put ( Array s . as List ( i , j ), update _ length ); 
+                } 
+            } 
+        } 
+        return length _ by _ path ; 
+    } 
+ } 
+ ```  
+----- another analysis -----

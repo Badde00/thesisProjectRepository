@@ -1,0 +1,170 @@
+This code seems to correctly implement the Shunting Yard algorithm, but there is a logical error in the algorithm. It is not checking for operators and not pushing them into the operator stack (`opstack`). Even when there is a condition to check the precedence of the operators, no operator is being pushed into the operator stack, therefore the algorithm will not work properly. 
+
+Here is the corrected code:
+
+```python
+def shunting_yard(tokens):
+    precedence = {
+        '+': 1,
+        '-': 1,
+        '*': 2,
+        '/': 2
+    }
+
+    rpntokens = []
+    opstack = []
+    for token in tokens:
+        if isinstance(token, int):
+            rpntokens.append(token)
+        else:
+            while opstack and precedence[token] <= precedence[opstack[-1]]:
+                rpntokens.append(opstack.pop())
+            opstack.append(token)
+
+    while opstack:
+        rpntokens.append(opstack.pop())
+
+    return rpntokens
+```
+
+I've added `opstack.append(token)` to push the operators into the operator stack.
+----- another analysis -----
+There is one error in the code. When a non-integer token (operator i.e '+', '-', '*' or '/') is encountered, it's not being pushed into the 'opstack'. 
+
+Here is the corrected version of the code:
+
+```python
+def shunting_yard(tokens):
+    precedence = {
+        '+': 1,
+        '-': 1,
+        '*': 2,
+        '/': 2
+    }
+
+    rpntokens = []
+    opstack = []
+    for token in tokens:
+        if isinstance(token, int):
+            rpntokens.append(token)
+        else:
+            while opstack and precedence[token] <= precedence[opstack[-1]]:
+                rpntokens.append(opstack.pop())
+            opstack.append(token)  # pushing operator to stack
+
+    while opstack:
+        rpntokens.append(opstack.pop())
+
+    return rpntokens
+```
+This code adds the operator onto the stack after popping all higher precedence operators from the stack. This fixes the error because each operator needs to be pushed to the stack to track their use.
+----- another analysis -----
+The given code doesn't have any syntactic errors, but it does contain a functional error. It seems like the token is expected to be an operator, but the code does not contain a case to handle tokens that are operators and aren't integers. It also does not push the current token to the operator stack, which it should. Otherwise, no operator would ever get pushed onto it, and none would ever get appended to the output list.
+
+Here is a corrected version of the code:
+
+```python
+def shunting_yard(tokens):
+    precedence = {
+        '+': 1,
+        '-': 1,
+        '*': 2,
+        '/': 2
+    }
+
+    rpntokens = []
+    opstack = []
+    for token in tokens:
+        if isinstance(token, int):
+            rpntokens.append(token)
+        else:
+            while opstack and precedence[token] <= precedence[opstack[-1]]:
+                rpntokens.append(opstack.pop())
+            opstack.append(token)
+
+    while opstack:
+        rpntokens.append(opstack.pop())
+
+    return rpntokens
+```
+This corrected version of the code pushes the current token to the operator stack after popping and appending tokens to the output list as long there are tokens on the stack with greater or equal precedence.
+----- another analysis -----
+There is only one logic error in this code:
+
+The code fails to push the incoming operator to the operator stack. After the inner while loop checking for operator precedence in the existing stack, the incoming operator should be pushed into the opstack.
+
+Here is the corrected code:
+
+```python
+def shunting_yard(tokens):
+    precedence = {
+        '+': 1,
+        '-': 1,
+        '*': 2,
+        '/': 2
+    }
+
+    rpntokens = []
+    opstack = []
+    for token in tokens:
+        if isinstance(token, int):
+            rpntokens.append(token)
+        else:
+            while opstack and precedence[token] <= precedence[opstack[-1]]:
+                rpntokens.append(opstack.pop())
+            opstack.append(token)  # push the incoming operator to the operator stack
+
+    while opstack:
+        rpntokens.append(opstack.pop())
+
+    return rpntokens
+```
+
+This corrected code correctly implements the Shunting Yard algorithm, which is used to parse mathematical expressions specified in infix notation.
+----- another analysis -----
+The code for the shunting_yard function looks structurally correct, but it seems to be missing the functionality to handle parentheses and doesn't add operators to the operator stack. In addition, when an integer token is encountered, it doesn't check whether it's a valid number. Also, it should check whether the token received is a valid operator before accessing its precedence.
+
+Here is the corrected version of the code.
+
+```python
+def shunting_yard(tokens):
+    precedence = {
+        '+': 1,
+        '-': 1,
+        '*': 2,
+        '/': 2
+    }
+
+    rpntokens = []
+    opstack = []
+    for token in tokens:
+        try:
+            rpntokens.append(int(token))  # add numbers directly to the output
+        except ValueError:  # if it's not a number, it's an operator or parentheses
+            if token in precedence:  # is it an operator?
+                # while there is an operator at the top of the operator stack with greater precedence
+                while (opstack and opstack[-1] in precedence and
+                       precedence[token] <= precedence[opstack[-1]]):
+                    # pop operators from the operator stack onto the output queue
+                    rpntokens.append(opstack.pop())
+                # push the read operator onto the operator stack
+                opstack.append(token)
+            elif token == '(':  # is it a left parentheses?
+                # push it onto the operator stack
+                opstack.append(token)
+            elif token == ')':  # is it a right parentheses?
+                # until there is a left parentheses at the top of the operator stack
+                while opstack and opstack[-1] != '(':
+                    # pop operators from the operator stack onto the output queue
+                    rpntokens.append(opstack.pop())
+                # pop the left parentheses from the operator stack
+                opstack.pop()
+
+    # while there are operators on the operator stack
+    while opstack:
+        # pop operators from the operator stack onto the output queue
+        rpntokens.append(opstack.pop())
+
+    return rpntokens
+```
+----- another analysis -----

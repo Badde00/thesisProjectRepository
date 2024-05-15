@@ -1,0 +1,152 @@
+ [ INST ] Please review the following code and identify and list any errors . If errors are present , please present a corrected version of the code as well . Keep explan ations short . 
+ 
+ 
+ def topological _ order ing ( nodes ): 
+    ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ] 
+ 
+    for node in ordered _ nodes : 
+        for next node in node . out going _ nodes : 
+            if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : 
+                ordered _ nodes . append ( next node ) 
+ 
+    return ordered _ nodes [ / INST ]  There are two errors in the code : 
+ 
+ 1 . The line ` ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ]` is not correct . It should be ` ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ]`. 
+ 2 . The line ` if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes :` is not correct . It should be ` if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : `. 
+ 
+ Here is the corrected code : 
+ ``` 
+ def topological _ order ing ( nodes ): 
+    ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ] 
+ 
+    for node in ordered _ nodes : 
+        for next node in node . out going _ nodes : 
+            if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : 
+                ordered _ nodes . append ( next node ) 
+ 
+    return ordered _ nodes 
+ ```  
+----- another analysis -----
+ [ INST ] Please review the following code and identify and list any errors . If errors are present , please present a corrected version of the code as well . Keep explan ations short . 
+ 
+ 
+ def topological _ order ing ( nodes ): 
+    ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ] 
+ 
+    for node in ordered _ nodes : 
+        for next node in node . out going _ nodes : 
+            if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : 
+                ordered _ nodes . append ( next node ) 
+ 
+    return ordered _ nodes [ / INST ]  There are several errors in the code : 
+ 
+ 1 . The line ` ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ]` is not correct . It should be ` ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ]`. 
+ 2 . The line ` for next node in node . out going _ nodes :` is not correct . It should be ` for next node in node . out going _ nodes : `. 
+ 3 . The line ` if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes :` is not correct . It should be ` if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : `. 
+ 4 . The line ` ordered _ nodes . append ( next node )` is not correct . It should be ` ordered _ nodes . append ( next node )`. 
+ 
+ Here is the corrected code : 
+ ``` 
+ def topological _ order ing ( nodes ): 
+    ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ] 
+ 
+    for node in ordered _ nodes : 
+        for next node in node . out going _ nodes : 
+            if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : 
+                ordered _ nodes . append ( next node ) 
+ 
+    return ordered _ nodes 
+ ```  
+----- another analysis -----
+ [ INST ] Please review the following code and identify and list any errors . If errors are present , please present a corrected version of the code as well . Keep explan ations short . 
+ 
+ 
+ def topological _ order ing ( nodes ): 
+    ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ] 
+ 
+    for node in ordered _ nodes : 
+        for next node in node . out going _ nodes : 
+            if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : 
+                ordered _ nodes . append ( next node ) 
+ 
+    return ordered _ nodes [ / INST ]  There are two errors in the code : 
+ 
+ 1 . The line ` ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ]` will not work as expected . The ` in coming _ nodes ` attribute is not defined in the ` node ` object , so this line will raise an error . 
+ 2 . The line ` if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes :` will also raise an error . The ` out going _ nodes ` attribute is not defined in the ` next node ` object , so this line will also raise an error . 
+ 
+ Here is a corrected version of the code : 
+ ``` 
+ def topological _ order ing ( nodes ): 
+    ordered _ nodes = [] 
+ 
+    for node in nodes : 
+        if not node . in coming _ nodes : 
+            ordered _ nodes . append ( node ) 
+ 
+    for node in ordered _ nodes : 
+        for next node in node . out going _ nodes : 
+            if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : 
+                ordered _ nodes . append ( next node ) 
+ 
+    return ordered _ nodes 
+ ``` 
+ This code should work as expected , but it is not clear what the purpose of the function is or what the input ` nodes ` is supposed to represent .  
+----- another analysis -----
+ [ INST ] Please review the following code and identify and list any errors . If errors are present , please present a corrected version of the code as well . Keep explan ations short . 
+ 
+ 
+ def topological _ order ing ( nodes ): 
+    ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ] 
+ 
+    for node in ordered _ nodes : 
+        for next node in node . out going _ nodes : 
+            if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : 
+                ordered _ nodes . append ( next node ) 
+ 
+    return ordered _ nodes [ / INST ]  There are two errors in the code : 
+ 
+ 1 . The line ` ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ]` is not correct . It should be ` ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes () ]`. The method ` in coming _ nodes ` is a function , so it needs to be called with ` ()`. 
+ 2 . The line ` if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes :` is not correct . It should be ` if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : `. The colon at the end of the if statement is not needed . 
+ 
+ Here is the corrected code : 
+ ``` 
+ def topological _ order ing ( nodes ): 
+    ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes () ] 
+ 
+    for node in ordered _ nodes : 
+        for next node in node . out going _ nodes : 
+            if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : 
+                ordered _ nodes . append ( next node ) 
+ 
+    return ordered _ nodes 
+ ```  
+----- another analysis -----
+ [ INST ] Please review the following code and identify and list any errors . If errors are present , please present a corrected version of the code as well . Keep explan ations short . 
+ 
+ 
+ def topological _ order ing ( nodes ): 
+    ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ] 
+ 
+    for node in ordered _ nodes : 
+        for next node in node . out going _ nodes : 
+            if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : 
+                ordered _ nodes . append ( next node ) 
+ 
+    return ordered _ nodes [ / INST ]  There are two errors in the code : 
+ 
+ 1 . The line ` ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes ]` is not correct . It should be ` ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes () ]`. The method ` in coming _ nodes ` is a function , so it needs to be called with ` ()`. 
+ 2 . The line ` if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes :` is not correct . It should be ` if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : `. The colon at the end of the line is not needed . 
+ 
+ Here is the corrected code : 
+ ``` 
+ def topological _ order ing ( nodes ): 
+    ordered _ nodes = [ node for node in nodes if not node . in coming _ nodes () ] 
+ 
+    for node in ordered _ nodes : 
+        for next node in node . out going _ nodes : 
+            if set ( ordered _ nodes ). iss up erset ( next node . out going _ nodes ) and next node not in ordered _ nodes : 
+                ordered _ nodes . append ( next node ) 
+ 
+    return ordered _ nodes 
+ ```  
+----- another analysis -----
